@@ -1,4 +1,4 @@
-﻿import { styledSvg } from '@/shared/lib/styled-svg';
+import { styledSvg } from '@/shared/lib/styled-svg';
 
 import ArchiveIcon from './archive.svg';
 import ArrowIcon from './arrow.svg';
@@ -12,6 +12,9 @@ import EditIcon from './edit.svg';
 import ListIcon from './list.svg';
 import MinusIcon from './minus.svg';
 import PlusIcon from './plus.svg';
+import ScalesIcon from './scales.svg';
+import SettingsIcon from './settings.svg';
+import XIcon from './x.svg';
 
 export const Archive = styledSvg(ArchiveIcon);
 
@@ -36,3 +39,12 @@ export const List = styledSvg(ListIcon);
 export const Minus = styledSvg(MinusIcon);
 
 export const Plus = styledSvg(PlusIcon);
+
+export const Scales = styledSvg(ScalesIcon);
+
+export const Settings = styledSvg(SettingsIcon);
+
+export const X = styledSvg(XIcon);
+
+
+

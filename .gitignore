@@ -3,3 +3,6 @@ node_modules/
 *.env*
 !.env.example
 android/
+graphify-out/
+.codex/
+.agents/

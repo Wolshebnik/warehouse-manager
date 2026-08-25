@@ -1,7 +1,7 @@
 import { Link, usePathname } from 'expo-router';
 import { Pressable, View } from 'react-native';
 
-import { BoxItems, Calendar } from '@/shared/assets/svg';
+import { BoxItems, Calendar, Settings } from '@/shared/assets/svg';
 import { ROUTES } from '@/shared/config/routes';
 import { cn } from '@/shared/lib/cn';
 import { Text } from '@/shared/ui/text';
@@ -9,6 +9,7 @@ import { Text } from '@/shared/ui/text';
 const navigationItems = [
   { href: ROUTES.HOME, label: 'Остатки', Icon: BoxItems },
   { href: ROUTES.HISTORY, label: 'История', Icon: Calendar },
+  { href: ROUTES.SETTINGS, label: 'Настройки', Icon: Settings },
 ] as const;
 
 export function BottomNavigation() {
@@ -18,9 +19,10 @@ export function BottomNavigation() {
     <View className='border-t border-border bg-surface'>
       <View className='flex-row'>
         {navigationItems.map(({ href, label, Icon }) => {
-          const isActive =
-            pathname === href ||
-            (href !== ROUTES.HOME && pathname.startsWith(href));
+          const isHomeTab = href === ROUTES.HOME;
+          const isHomeRoute =
+            pathname === ROUTES.HOME || pathname.startsWith('/items');
+          const isActive = isHomeTab ? isHomeRoute : pathname.startsWith(href);
 
           return (
             <Link key={href} href={href} asChild>

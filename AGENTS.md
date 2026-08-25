@@ -141,5 +141,31 @@ Do not assume the file content based on conversation history or cached context. 
 - **No Ternaries with Null**: NEVER write `{condition ? <Component /> : null}` when a simple boolean short-circuit suffices.
 - **Short-circuit Syntax**: Always write `{condition && <Component />}` or `{Boolean(condition) && <Component />}` for clean, concise, and readable conditional rendering.
 
+## 22. Parameterized Atomic Components over Rigid Row Wrappers
 
+- **Single Atomic Component for Variations**: When UI items share structure but represent different variants (e.g. income vs. expense, positive vs. negative, stat items, action buttons), create ONE single reusable atomic component parameterized by a `type` / `variant` prop rather than hardcoding multiple items inside a rigid "row" or "list" component.
+- **Direct Layout Composition**: Render the atomic component multiple times directly in the parent layout/page (e.g. `<View className='flex-row gap-3'><ItemActionCard type='income' /><ItemActionCard type='expense' /></View>`).
+- **No Meaningless Pass-through Wrappers**: Do not create wrapper components whose only purpose is forwarding props down to two or more variations. Keep components atomic and compose them directly in the screen or widget layout.
 
+## 23. No Nested Ternaries (Anti-Pattern)
+
+- **NEVER** write nested ternary operators (`a ? b : c ? d : e`).
+- Use lookup dictionary objects (`Record<Key, Value>`), `if / else if / else` branching, or small dedicated helper functions instead. This guarantees clear intent and readable code.
+
+## 24. ClassName Composition with `cn(...)`
+
+- **NEVER** use manual template string interpolation (`className={`... ${className ?? ''}`}`) for class names.
+- **ALWAYS** use the `cn(...)` utility (`import { cn } from '@/shared/lib/cn';`) for merging classNames and applying conditional styles.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

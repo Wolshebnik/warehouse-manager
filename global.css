@@ -17,9 +17,13 @@
 
   --color-green: #257521;
   --color-green-soft: #EAF4E4;
+  --color-green-tint: #F4FAF3;
+  --color-green-border: #D6ECD4;
 
   --color-red: #C72220;
   --color-red-soft: #F7E2E0;
+  --color-red-tint: #FEF5F4;
+  --color-red-border: #FADCDA;
 
   --color-orange: #F6A938;
   --color-orange-soft: #FEF5E8;
@@ -42,6 +46,9 @@
   --radius-8: 8px;
   --radius-12: 12px;
   --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-32: 32px;
 
   --shadow-button: 0 4px 12px rgba(0, 0, 0, 0.2);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);

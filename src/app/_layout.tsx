@@ -11,6 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { queryClient } from '@/shared/api/query-client';
+import { SupabaseAuthProvider } from '@/shared/api/supabase-auth-provider';
 import { BottomNavigation } from '@/widgets/bottom-navigation';
 
 import '../../global.css';
@@ -33,31 +34,32 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <BottomSheetModalProvider>
-          <SafeAreaProvider>
-            <StyledSafeAreaView
-              edges={['top', 'bottom']}
-              className='flex-1 bg-surface'
-            >
-              <StatusBar
-                barStyle='dark-content'
-                backgroundColor='transparent'
-                translucent
-              />
+    <SupabaseAuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <BottomSheetModalProvider>
+            <SafeAreaProvider>
+              <StyledSafeAreaView
+                edges={['top', 'bottom']}
+                className='flex-1 bg-surface'
+              >
+                <StatusBar
+                  barStyle='dark-content'
+                  backgroundColor='transparent'
+                  translucent
+                />
 
-              <NavigationBar style='dark' />
+                <NavigationBar style='dark' />
 
-              <View className='flex-1 bg-background'>
-                <Stack screenOptions={{ headerShown: false }} />
-                <BottomNavigation />
-              </View>
-            </StyledSafeAreaView>
-          </SafeAreaProvider>
-        </BottomSheetModalProvider>
-      </GestureHandlerRootView>
-    </QueryClientProvider>
+                <View className='flex-1 bg-background'>
+                  <Stack screenOptions={{ headerShown: false }} />
+                  <BottomNavigation />
+                </View>
+              </StyledSafeAreaView>
+            </SafeAreaProvider>
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+      </QueryClientProvider>
+    </SupabaseAuthProvider>
   );
 }
-
