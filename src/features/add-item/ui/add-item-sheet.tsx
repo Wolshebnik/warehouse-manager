@@ -18,11 +18,18 @@ export function AddItemSheet({
   onRestored,
   restoreOnly = false,
 }: AddItemSheetProps) {
+  let title = 'Додати товар';
+  if (restoreOnly) {
+    title = 'Відновити товар';
+  } else if (item) {
+    title = 'Редагувати товар';
+  }
+
   return (
     <BottomSheet
       isOpen={isOpen}
       onClose={onClose}
-      title={restoreOnly ? 'Відновити товар' : item ? 'Редагувати товар' : 'Додати товар'}
+      title={title}
     >
       <AddItemForm
         key={`${item?.id ?? 'new'}-${isOpen ? 'open' : 'closed'}`}

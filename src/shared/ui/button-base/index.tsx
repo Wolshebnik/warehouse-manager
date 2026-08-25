@@ -1,13 +1,15 @@
 import type { ReactNode } from 'react';
 
-import { Pressable, type PressableProps } from 'react-native';
+import { Pressable, type PressableProps, View } from 'react-native';
 
 import { cn } from '@/shared/lib/cn';
 import { Text } from '@/shared/ui/text';
 
 import {
-  type ButtonVariant,
   type ButtonAppearance,
+  type ButtonSize,
+  type ButtonVariant,
+  buttonSizeTextClassNames,
   outlineRippleColors,
   outlineTextClassNames,
   outlineVariantClassNames,
@@ -15,10 +17,40 @@ import {
   solidVariantClassNames,
 } from './button-appearance';
 
-export interface ButtonBaseProps extends Omit<PressableProps, 'android_ripple' | 'style'> {
-  children?: ReactNode;
-  variant?: ButtonVariant;
+export type { ButtonAppearance, ButtonSize, ButtonVariant };
+
+export interface ButtonBaseProps extends Omit<
+  PressableProps,
+  'android_ripple' | 'style'
+> {
   appearance?: ButtonAppearance;
+  children?: ReactNode;
+  size?: ButtonSize;
+  textClassName?: string;
+  variant?: ButtonVariant;
+}
+
+const RADIUS_MAP: Record<string, number> = {
+  'rounded-full': 9999,
+  'rounded-3xl': 24,
+  'rounded-24': 24,
+  'rounded-2xl': 16,
+  'rounded-20': 20,
+  'rounded-16': 16,
+  'rounded-xl': 12,
+  'rounded-12': 12,
+  'rounded-10': 10,
+  'rounded-lg': 8,
+  'rounded-md': 6,
+  'rounded-sm': 4,
+};
+
+function getBorderRadiusFromClassName(className?: string): number {
+  if (!className) return 12;
+  for (const [key, val] of Object.entries(RADIUS_MAP)) {
+    if (className.includes(key)) return val;
+  }
+  return 12;
 }
 
 export function ButtonBase({
@@ -26,40 +58,49 @@ export function ButtonBase({
   className,
   variant = 'green',
   appearance = 'solid',
+  size = 'md',
+  textClassName,
   ...props
 }: ButtonBaseProps) {
+  const isOutline = appearance === 'outline';
+  const borderRadius = getBorderRadiusFromClassName(className);
+
   return (
-    <Pressable
-      className={cn(
-        'items-center justify-center overflow-hidden rounded-12 px-4 py-3 active:scale-[0.98]',
-        appearance === 'outline' && 'border',
-        appearance === 'solid'
-          ? solidVariantClassNames[variant]
-          : outlineVariantClassNames[variant],
-        className,
-      )}
-      android_ripple={{
-        color:
+    <View style={{ borderRadius, overflow: 'hidden' }}>
+      <Pressable
+        className={cn(
+          'items-center justify-center rounded-12 px-4 py-3',
+          isOutline && 'border',
           appearance === 'solid'
-            ? 'rgba(255, 255, 255, 0.24)'
-            : outlineRippleColors[variant],
-      }}
-      {...props}
-    >
-      {typeof children === 'string' ? (
-        <Text
-          className={cn(
-            'font-semibold text-[15px] leading-[22px]',
-            appearance === 'solid'
-              ? solidTextClassNames[variant]
-              : outlineTextClassNames[variant],
-          )}
-        >
-          {children}
-        </Text>
-      ) : (
-        children
-      )}
-    </Pressable>
+            ? solidVariantClassNames[variant]
+            : outlineVariantClassNames[variant],
+          className,
+        )}
+        android_ripple={{
+          borderless: false,
+          color: isOutline
+            ? outlineRippleColors[variant]
+            : 'rgba(255, 255, 255, 0.24)',
+        }}
+        {...props}
+      >
+        {typeof children === 'string' ? (
+          <Text
+            className={cn(
+              'font-semibold',
+              buttonSizeTextClassNames[size],
+              appearance === 'solid'
+                ? solidTextClassNames[variant]
+                : outlineTextClassNames[variant],
+              textClassName,
+            )}
+          >
+            {children}
+          </Text>
+        ) : (
+          children
+        )}
+      </Pressable>
+    </View>
   );
 }

@@ -1,5 +1,12 @@
 export type ButtonVariant = 'green' | 'red' | 'orange' | 'blue' | 'neutral';
 export type ButtonAppearance = 'solid' | 'outline';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+
+export const buttonSizeTextClassNames: Record<ButtonSize, string> = {
+  sm: 'text-[13px] leading-4',
+  md: 'text-[15px] leading-[22px]',
+  lg: 'text-[16px] leading-[24px]',
+};
 
 export const solidVariantClassNames: Record<ButtonVariant, string> = {
   green: 'bg-green',
@@ -10,11 +17,11 @@ export const solidVariantClassNames: Record<ButtonVariant, string> = {
 };
 
 export const outlineVariantClassNames: Record<ButtonVariant, string> = {
-  green: 'border-green',
-  red: 'border-red',
-  orange: 'border-orange',
-  blue: 'border-blue',
-  neutral: 'border-neutral',
+  green: 'border-green bg-transparent',
+  red: 'border-red bg-transparent',
+  orange: 'border-orange bg-transparent',
+  blue: 'border-blue bg-transparent',
+  neutral: 'border-neutral bg-transparent',
 };
 
 export const outlineTextClassNames: Record<ButtonVariant, string> = {
@@ -40,3 +47,4 @@ export const outlineRippleColors: Record<ButtonVariant, string> = {
   blue: 'rgba(87, 154, 249, 0.16)',
   neutral: 'rgba(168, 172, 177, 0.16)',
 };
+

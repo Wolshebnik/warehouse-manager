@@ -6,8 +6,9 @@ import { type Item, useGetArchivedItems } from '@/entities/item';
 import { AddItemSheet } from '@/features/add-item';
 import { ROUTES } from '@/shared/config/routes';
 import { cn } from '@/shared/lib/cn';
-import { ButtonLoader } from '@/shared/ui/button-loader';
-import { CircularProgressLoader } from '@/shared/ui/circular-progress-loader';
+import { EmptyView } from '@/shared/ui/empty-view';
+import { ErrorView } from '@/shared/ui/error-view';
+import { LoadingView } from '@/shared/ui/loading-view';
 import { PageTitle } from '@/shared/ui/page-title';
 import { Text } from '@/shared/ui/text';
 import { AppHeader } from '@/widgets/header';
@@ -35,26 +36,14 @@ export function ItemsArchivedPage() {
           className='mb-6'
         />
 
-        {isLoading && (
-          <View className='items-center justify-center py-12'>
-            <CircularProgressLoader color='#257521' size='large' />
-          </View>
-        )}
+        {isLoading && <LoadingView />}
 
         {isError && (
-          <View className='items-center justify-center rounded-16 border border-dashed border-border bg-surface p-8'>
-            <Text className='mb-4 text-center font-normal text-[14px] text-text-muted'>
-              Не вдалося завантажити архів товарів.
-            </Text>
-            <ButtonLoader
-              appearance='outline'
-              variant='green'
-              loading={isRefetching}
-              onPress={() => void refetch()}
-            >
-              Повторити
-            </ButtonLoader>
-          </View>
+          <ErrorView
+            message='Не вдалося завантажити архів товарів.'
+            isRetrying={isRefetching}
+            onRetry={() => void refetch()}
+          />
         )}
 
         {!isLoading && !isError && items.length > 0 && (
@@ -79,7 +68,7 @@ export function ItemsArchivedPage() {
                   )}
                 </View>
                 <Text className='font-medium text-[15px] text-text-muted'>
-                  {item.unit.short || item.unit.name}
+                  {item.unit?.short || item.unit?.name || ''}
                 </Text>
               </Pressable>
             ))}
@@ -87,9 +76,7 @@ export function ItemsArchivedPage() {
         )}
 
         {!isLoading && !isError && items.length === 0 && (
-          <View className='items-center justify-center rounded-16 border border-dashed border-border bg-surface p-8'>
-            <Text className='font-normal text-[14px] text-text-muted'>Архів порожній</Text>
-          </View>
+          <EmptyView message='Архів порожній' />
         )}
       </ScrollView>
 

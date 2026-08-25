@@ -69,7 +69,7 @@ export function ItemRow({
         </View>
 
         <Text className='font-medium text-[15px] text-text-muted'>
-          {item.unit.short || item.unit.name}
+          {item.unit?.short || item.unit?.name || ''}
         </Text>
       </TouchableOpacity>
     </Animated.View>

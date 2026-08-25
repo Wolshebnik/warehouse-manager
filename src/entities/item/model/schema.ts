@@ -1,22 +1,47 @@
 import { z } from 'zod';
 
-export const itemUnitSchema = z.object({
+export const unitSchema = z.object({
   id: z.string(),
   name: z.string(),
   short: z.string(),
+});
+
+export const itemUnitSchema = unitSchema;
+
+export const stockMovementSchema = z.object({
+  id: z.string(),
+  item_id: z.string(),
+  type: z.enum(['income', 'expense']),
+  quantity: z.coerce.number(),
+  description: z.string().nullable(),
+  created_at: z.string(),
+});
+
+export const itemDetailsSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().nullable(),
+  current_balance: z.coerce.number(),
+  sort_order: z.number(),
+  is_archived: z.boolean(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  unit_id: z.string().nullable(),
+  unit: unitSchema.nullable().optional(),
+  movements: z.array(stockMovementSchema).default([]),
 });
 
 export const itemSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string().nullable(),
-  current_balance: z.number(),
+  current_balance: z.coerce.number(),
   sort_order: z.number(),
   is_archived: z.boolean(),
   created_at: z.string(),
   updated_at: z.string(),
-  unit_id: z.string(),
-  unit: itemUnitSchema,
+  unit_id: z.string().nullable(),
+  unit: unitSchema.nullable().optional(),
 });
 
 export const itemsSchema = z.array(itemSchema);
@@ -37,5 +62,8 @@ export const updateItemSchema = z.object({
 });
 
 export type Item = z.infer<typeof itemSchema>;
+export type ItemDetails = z.infer<typeof itemDetailsSchema>;
+export type StockMovement = z.infer<typeof stockMovementSchema>;
+export type MovementType = StockMovement['type'];
 export type CreateItemDto = z.infer<typeof createItemSchema>;
 export type UpdateItemDto = z.infer<typeof updateItemSchema>;

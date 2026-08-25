@@ -1,18 +1,21 @@
 import { useState } from 'react';
 
+import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { useGetItems } from '@/entities/item';
 import { AddItemSheet } from '@/features/add-item';
 import { Plus } from '@/shared/assets/svg';
-import { ButtonLoader } from '@/shared/ui/button-loader';
+import { ROUTES } from '@/shared/config/routes';
 import { CategoryCard } from '@/shared/ui/category-card';
-import { CircularProgressLoader } from '@/shared/ui/circular-progress-loader';
+import { EmptyView } from '@/shared/ui/empty-view';
+import { ErrorView } from '@/shared/ui/error-view';
+import { LoadingView } from '@/shared/ui/loading-view';
 import { PageTitle } from '@/shared/ui/page-title';
-import { Text } from '@/shared/ui/text';
 import { AppHeader } from '@/widgets/header';
 
 export function HomePage() {
+  const router = useRouter();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const {
     data: items = [],
@@ -27,7 +30,7 @@ export function HomePage() {
       <AppHeader
         rightAction={
           <Pressable
-            accessibilityLabel='Добавить'
+            accessibilityLabel='Додати'
             accessibilityRole='button'
             className='h-10 w-10 items-center justify-center rounded-12 border border-green active:scale-[0.94]'
             onPress={() => setIsAddOpen(true)}
@@ -43,39 +46,23 @@ export function HomePage() {
         className='flex-1'
       >
         <PageTitle
-          title='Остатки'
-          subtitle='Текущее состояние склада'
+          title='Залишки'
+          subtitle='Поточний стан складу'
           className='mb-4'
         />
 
-        {isLoading && (
-          <View className='mb-6 items-center justify-center py-12'>
-            <CircularProgressLoader color='#257521' size='large' />
-          </View>
-        )}
+        {isLoading && <LoadingView />}
 
         {isError && (
-          <View className='mb-6 items-center justify-center rounded-16 border border-dashed border-border bg-surface p-8'>
-            <Text className='mb-4 text-center font-normal text-[14px] text-text-muted'>
-              Не удалось загрузить остатки.
-            </Text>
-            <ButtonLoader
-              appearance='outline'
-              variant='green'
-              loading={isRefetching}
-              onPress={() => void refetch()}
-            >
-              Повторить
-            </ButtonLoader>
-          </View>
+          <ErrorView
+            message='Не вдалося завантажити залишки.'
+            isRetrying={isRefetching}
+            onRetry={() => void refetch()}
+          />
         )}
 
         {!isLoading && !isError && items.length === 0 && (
-          <View className='mb-6 items-center justify-center rounded-16 border border-dashed border-border bg-surface p-8'>
-            <Text className='font-normal text-[14px] text-text-muted'>
-              Товаров пока нет
-            </Text>
-          </View>
+          <EmptyView message='Товарів поки немає' />
         )}
 
         {!isLoading &&
@@ -88,6 +75,7 @@ export function HomePage() {
               unit={item.unit?.short || item.unit?.name || 'кг'}
               colorIndex={index}
               className='mb-3'
+              onPress={() => router.push(ROUTES.ITEM_DETAILS(item.id))}
             />
           ))}
       </ScrollView>

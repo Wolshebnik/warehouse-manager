@@ -19,9 +19,10 @@ export function BottomNavigation() {
     <View className='border-t border-border bg-surface'>
       <View className='flex-row'>
         {navigationItems.map(({ href, label, Icon }) => {
-          const isActive =
-            pathname === href ||
-            (href !== ROUTES.HOME && pathname.startsWith(href));
+          const isHomeTab = href === ROUTES.HOME;
+          const isHomeRoute =
+            pathname === ROUTES.HOME || pathname.startsWith('/items');
+          const isActive = isHomeTab ? isHomeRoute : pathname.startsWith(href);
 
           return (
             <Link key={href} href={href} asChild>
