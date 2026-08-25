@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Warehouse Manager",
+    "slug": "warehouse-manager",
+    "scheme": "warehousemanager",
+    "version": "1.0.0",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "expo-router",
+      [
+        "expo-navigation-bar",
+        {
+          "enforceContrast": false,
+          "hidden": false,
+          "style": "dark"
+        }
+      ]
+    ],
+    "android": {
+      "package": "com.warehousemanager.app"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

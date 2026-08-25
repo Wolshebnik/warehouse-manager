@@ -1,0 +1,49 @@
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css';
+
+@import 'nativewind/theme';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: #FBFAF8;
+  --color-surface: #FFFFFF;
+  --color-border: #DADFDB;
+
+  --color-text-primary: #080C11;
+  --color-text-secondary: #4C5054;
+  --color-text-muted: #727578;
+
+  --color-green: #257521;
+  --color-green-soft: #EAF4E4;
+
+  --color-red: #C72220;
+  --color-red-soft: #F7E2E0;
+
+  --color-orange: #F6A938;
+  --color-orange-soft: #FEF5E8;
+
+  --color-blue: #579AF9;
+  --color-blue-soft: #EFF4FE;
+
+  --color-neutral: #A8ACB1;
+  --color-neutral-soft: #F3F3F3;
+
+  --font-bold: 'RobotoFlex_700Bold';
+  --font-extrabold: 'RobotoFlex_800ExtraBold';
+  --font-medium: 'RobotoFlex_500Medium';
+  --font-regular: 'RobotoFlex_400Regular';
+  --font-sans: 'RobotoFlex_400Regular';
+  --font-semibold: 'RobotoFlex_600SemiBold';
+  --text-base: 16px;
+  --text-base--line-height: 1.2em;
+
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+
+  --shadow-button: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
