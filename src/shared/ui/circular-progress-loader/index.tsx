@@ -1,4 +1,4 @@
-﻿import { ActivityIndicator, type ActivityIndicatorProps } from 'react-native';
+import { ActivityIndicator, type ActivityIndicatorProps } from 'react-native';
 
 type CircularProgressLoaderProps = {
   className?: string;

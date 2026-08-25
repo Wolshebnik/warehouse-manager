@@ -1,4 +1,4 @@
-﻿import { styled } from 'nativewind';
+import { styled } from 'nativewind';
 import type { ComponentType } from 'react';
 import type { SvgProps } from 'react-native-svg';
 

@@ -1,4 +1,4 @@
-﻿import type { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { ButtonBase, type ButtonBaseProps } from '@/shared/ui/button-base';
 import { CircularProgressLoader } from '@/shared/ui/circular-progress-loader';

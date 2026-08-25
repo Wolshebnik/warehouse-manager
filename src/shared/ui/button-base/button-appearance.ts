@@ -1,4 +1,4 @@
-﻿export type ButtonVariant = 'green' | 'red' | 'orange' | 'blue' | 'neutral';
+export type ButtonVariant = 'green' | 'red' | 'orange' | 'blue' | 'neutral';
 export type ButtonAppearance = 'solid' | 'outline';
 
 export const solidVariantClassNames: Record<ButtonVariant, string> = {

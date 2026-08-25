@@ -1,7 +1,7 @@
 import { Link, usePathname } from 'expo-router';
 import { Pressable, View } from 'react-native';
 
-import { BoxItems, Calendar } from '@/shared/assets/svg';
+import { BoxItems, Calendar, Settings } from '@/shared/assets/svg';
 import { ROUTES } from '@/shared/config/routes';
 import { cn } from '@/shared/lib/cn';
 import { Text } from '@/shared/ui/text';
@@ -9,6 +9,7 @@ import { Text } from '@/shared/ui/text';
 const navigationItems = [
   { href: ROUTES.HOME, label: 'Остатки', Icon: BoxItems },
   { href: ROUTES.HISTORY, label: 'История', Icon: Calendar },
+  { href: ROUTES.SETTINGS, label: 'Настройки', Icon: Settings },
 ] as const;
 
 export function BottomNavigation() {

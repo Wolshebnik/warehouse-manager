@@ -1,4 +1,4 @@
-﻿import type { ComponentType } from 'react';
+import type { ComponentType } from 'react';
 import { Pressable, View } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 

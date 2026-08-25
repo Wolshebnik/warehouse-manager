@@ -28,20 +28,20 @@ export function InputBase({
 
   const InputComponent = bottomSheet && !isWide ? BottomSheetTextInput : TextInput;
 
-  const borderClassName = hasError ? 'border-danger' : 'border-primary';
+  const borderClassName = hasError ? 'border-red' : 'border-green';
 
   const inputClassName = cn(
     'pl-4 pr-4',
-    'text-[16px] text-text',
+    'text-[16px] text-text-primary',
     'outline-none',
-    'placeholder:text-placeholder',
-    props.editable === false && 'bg-grey/10 text-placeholder',
+    'placeholder:text-text-muted',
+    props.editable === false && 'bg-neutral-soft text-text-muted',
   );
 
   return (
     <View className={cn('w-full', label && 'pt-2.5', className)}>
       {label ? (
-        <View className={cn('relative h-14 rounded-8 border', borderClassName)}>
+        <View className={cn('relative h-14 rounded-12 border', borderClassName)}>
           <View
             className='absolute -top-2.5 left-3 z-10 flex-row items-center px-1'
             style={{ backgroundColor: labelColor }}
@@ -49,14 +49,14 @@ export function InputBase({
             <Text
               className={cn(
                 'text-[12px]',
-                hasError ? 'text-danger' : 'text-primary',
+                hasError ? 'text-red' : 'text-green',
               )}
             >
               {label}
             </Text>
 
             {required && (
-              <Text className='ml-0.5 text-[12px] text-danger'>*</Text>
+              <Text className='ml-0.5 text-[12px] text-red'>*</Text>
             )}
           </View>
 
@@ -66,7 +66,7 @@ export function InputBase({
         <InputComponent
           className={cn(
             inputClassName,
-            'h-14 rounded-8 border',
+            'h-14 rounded-12 border',
             borderClassName,
           )}
           {...props}
@@ -74,8 +74,9 @@ export function InputBase({
       )}
 
       {hasError && (
-        <Text className='ml-1 mt-1 text-[12px] text-danger'>{error}</Text>
+        <Text className='ml-1 mt-1 text-[12px] text-red'>{error}</Text>
       )}
     </View>
   );
 }
+
