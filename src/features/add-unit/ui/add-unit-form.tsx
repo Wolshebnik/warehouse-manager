@@ -55,7 +55,7 @@ export function AddUnitForm({ onCancel, onSuccess, unit }: AddUnitFormProps) {
   const isLoading = isSubmitting || isPending || isUpdatePending;
 
   return (
-    <View className='gap-4 pt-2 pb-2'>
+    <View className='gap-2 py-2'>
       <Controller
         control={control}
         name='name'

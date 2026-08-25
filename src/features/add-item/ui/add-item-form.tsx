@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   type CreateItemDto,
@@ -14,6 +14,7 @@ import {
 import { useGetUnits } from '@/entities/unit';
 import { ButtonLoader } from '@/shared/ui/button-loader';
 import { InputBase } from '@/shared/ui/input-base';
+import { Select } from '@/shared/ui/select';
 import { Text } from '@/shared/ui/text';
 
 interface AddItemFormProps {
@@ -48,22 +49,29 @@ export function AddItemForm({
     resolver: zodResolver(createItemSchema),
     defaultValues: {
       name: item?.name ?? '',
+      description: item?.description ?? '',
       unit_id: item?.unit_id ?? '',
     },
   });
 
   const onSubmit = async (data: CreateItemDto) => {
     try {
+      const descriptionValue = data.description?.trim() ? data.description.trim() : null;
+
       if (item) {
         await updateItemMutation({
           id: item.id,
           dto: {
             name: data.name,
+            description: descriptionValue,
             unit_id: data.unit_id,
           },
         });
       } else {
-        await createItemMutation(data);
+        await createItemMutation({
+          ...data,
+          description: descriptionValue,
+        });
       }
       onCancel();
     } catch {
@@ -130,7 +138,7 @@ export function AddItemForm({
   }
 
   return (
-    <View className='gap-4 py-2'>
+    <View className='gap-2 py-2'>
       <Controller
         control={control}
         name='name'
@@ -149,31 +157,35 @@ export function AddItemForm({
 
       <Controller
         control={control}
+        name='description'
+        render={({ field: { onChange, value } }) => (
+          <InputBase
+            bottomSheet
+            label='Опис'
+            placeholder='наприклад: Опис товару'
+            value={value ?? ''}
+            onChangeText={onChange}
+            error={errors.description?.message}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
         name='unit_id'
         render={({ field: { onChange, value } }) => (
-          <View className='gap-2'>
-            <Text className='font-medium text-[13px] text-text-muted'>
-              Одиниця виміру *
-            </Text>
-            <View className='gap-2'>
-              {units.map((unit) => (
-                <Pressable
-                  key={unit.id}
-                  className={`rounded-12 border px-4 py-3 ${value === unit.id ? 'border-green bg-green-soft' : 'border-border bg-surface'}`}
-                  onPress={() => onChange(unit.id)}
-                >
-                  <Text className='font-medium text-[15px] text-text-primary'>
-                    {unit.name} ({unit.short})
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-            {errors.unit_id?.message && (
-              <Text className='ml-1 text-[12px] text-red'>
-                {errors.unit_id.message}
-              </Text>
-            )}
-          </View>
+          <Select
+            error={errors.unit_id?.message}
+            label='Одиниця виміру'
+            onChange={onChange}
+            options={units.map((unit) => ({
+              label: `${unit.name} (${unit.short})`,
+              value: unit.id,
+            }))}
+            placeholder='Оберіть одиницю виміру'
+            required
+            value={value}
+          />
         )}
       />
 
@@ -188,7 +200,7 @@ export function AddItemForm({
         loading={isLoading}
         loaderColor='#FFFFFF'
         loaderSize='small'
-        className='w-full py-3.5'
+        className='mt-2 w-full py-3.5'
         onPress={handleSubmit(onSubmit)}
       >
         Зберегти

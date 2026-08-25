@@ -68,9 +68,16 @@ export function ItemsArchivedPage() {
                 )}
                 onPress={() => setSelectedItem(item)}
               >
-                <Text className='flex-1 pr-4 font-medium text-[16px] text-text-primary'>
-                  {item.name}
-                </Text>
+                <View className='flex-1 pr-4'>
+                  <Text className='font-medium text-[16px] text-text-primary'>
+                    {item.name}
+                  </Text>
+                  {item.description && (
+                    <Text className='mt-0.5 font-normal text-[13px] text-text-muted'>
+                      {item.description}
+                    </Text>
+                  )}
+                </View>
                 <Text className='font-medium text-[15px] text-text-muted'>
                   {item.unit.short || item.unit.name}
                 </Text>

@@ -23,7 +23,7 @@ export const itemsSchema = z.array(itemSchema);
 
 export const createItemSchema = z.object({
   name: z.string().trim().min(1, 'Введіть назву'),
-  description: z.string().trim().optional(),
+  description: z.string().trim().nullable().optional(),
   unit_id: z.string().min(1, 'Оберіть одиницю виміру'),
   sort_order: z.number().optional(),
 });
