@@ -71,10 +71,7 @@ export function MovementSummaryCard({
         </Text>
 
         {Boolean(normalizedDescription) && (
-          <Text
-            className='font-normal text-[13px] text-text-muted'
-            numberOfLines={1}
-          >
+          <Text className='font-normal text-[13px] text-text-muted'>
             {normalizedDescription}
           </Text>
         )}

@@ -1,10 +1,29 @@
 {
   "expo": {
-    "name": "Warehouse Manager",
+    "name": "Мій склад",
     "slug": "warehouse-manager",
     "scheme": "warehousemanager",
     "version": "1.0.0",
     "userInterfaceStyle": "light",
+    "icon": "./src/shared/assets/png/warehouse.png",
+    "splash": {
+      "image": "./src/shared/assets/png/warehouse.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FBFAF8"
+    },
+    "android": {
+      "package": "com.warehousemanager.app",
+      "icon": "./src/shared/assets/png/warehouse.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/shared/assets/png/warehouse.png",
+        "backgroundColor": "#29C235"
+      },
+      "splash": {
+        "image": "./src/shared/assets/png/warehouse.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#FBFAF8"
+      }
+    },
     "plugins": [
       "expo-router",
       [
@@ -17,9 +36,6 @@
       ],
       "expo-sharing"
     ],
-    "android": {
-      "package": "com.warehousemanager.app"
-    },
     "web": {
       "bundler": "metro"
     }
