@@ -4,11 +4,12 @@ import { Arrow } from '@/shared/assets/svg';
 import { formatMovementDay, formatMovementTime } from '@/shared/lib/date';
 import { MovementSummaryCard } from '@/shared/ui/movement-summary-card';
 
-import type { MovementType, StockMovement } from '../model/schema';
+import type { DayMovementItem, MovementType, StockMovement } from '../model/schema';
 
 interface ItemMovementCardProps {
   className?: string;
-  movement: StockMovement;
+  description?: string;
+  movement: StockMovement | DayMovementItem;
   showDate?: boolean;
   time?: string;
   title?: string;
@@ -21,17 +22,20 @@ const movementIcons: Record<MovementType, ReactNode> = {
 };
 
 function resolveMovementViewData(
-  movement: StockMovement,
+  movement: StockMovement | DayMovementItem,
   fallbackUnit?: string,
   customTitle?: string,
   customTime?: string,
   showDate = true,
+  customDescription?: string,
 ) {
   const type = movement.type;
-  const displayTitle = customTitle ?? 'Товар';
+  const itemInMovement = 'item' in movement ? movement.item : undefined;
+  const displayTitle = customTitle ?? itemInMovement?.name ?? 'Товар';
   const time = customTime ?? formatMovementTime(movement.created_at);
   const date = showDate ? formatMovementDay(movement.created_at) : undefined;
-  const description = movement.description?.trim() || undefined;
+  const description =
+    customDescription ?? (movement.description?.trim() || undefined);
   const amountVal = movement.quantity.toLocaleString('uk-UA');
   const unitSuffix = fallbackUnit ? ` ${fallbackUnit}` : '';
   const prefix = type === 'income' ? '+' : '−';
@@ -49,6 +53,7 @@ function resolveMovementViewData(
 
 export function ItemMovementCard({
   className,
+  description: customDescription,
   movement,
   showDate = true,
   time,
@@ -62,7 +67,7 @@ export function ItemMovementCard({
     formattedAmount,
     time: displayTime,
     type,
-  } = resolveMovementViewData(movement, unit, title, time, showDate);
+  } = resolveMovementViewData(movement, unit, title, time, showDate, customDescription);
 
   return (
     <MovementSummaryCard

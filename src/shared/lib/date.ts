@@ -93,4 +93,13 @@ export function formatMovementTime(
   return dayjs.utc(date).utcOffset(offsetHours).format('HH:mm');
 }
 
+export function formatExportTimestamp(
+  date?: string | number | Date | Dayjs,
+  offsetHours: number = KYIV_UTC_OFFSET_HOURS,
+): string {
+  const base = date ? (dayjs.isDayjs(date) ? date : dayjs(date)) : dayjs.utc();
+  const d = base.utcOffset(offsetHours);
+  return d.format('DD.MM.YYYY [о] HH:mm');
+}
+
 export { dayjs, type Dayjs };

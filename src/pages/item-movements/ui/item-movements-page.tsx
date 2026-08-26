@@ -1,15 +1,21 @@
 import { useMemo, useState } from 'react';
 
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 import {
   ItemBalanceCard,
   ItemMovementCard,
   useItemById,
 } from '@/entities/item';
+import {
+  ExportItemMovementsReportView,
+  useExportItemMovementsReport,
+} from '@/features/export-item-movements-report';
+import { Screenshot } from '@/shared/assets/svg';
 import { ROUTES } from '@/shared/config/routes';
 import { dayjs, formatMonthName, getMonthDateRange } from '@/shared/lib/date';
+import { CircularProgressLoader } from '@/shared/ui/circular-progress-loader';
 import { EmptyView } from '@/shared/ui/empty-view';
 import { ErrorView } from '@/shared/ui/error-view';
 import { LoadingView } from '@/shared/ui/loading-view';
@@ -30,6 +36,13 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
   const params = useLocalSearchParams<{ id?: string }>();
   const id =
     itemId ?? (Array.isArray(params.id) ? params.id[0] : params.id) ?? '';
+
+  const {
+    exportRef,
+    exportReport,
+    generatedAt,
+    isExporting,
+  } = useExportItemMovementsReport();
 
   const [filter, setFilter] = useState<MovementFilterType>('all');
   const [selectedDate, setSelectedDate] = useState(() => dayjs());
@@ -78,6 +91,23 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
       <AppHeader
         onBackPress={() => router.replace(ROUTES.ITEM_DETAILS(id))}
         title='Всі рухи'
+        rightAction={
+          item && (
+            <Pressable
+              accessibilityLabel='Експорт рухів'
+              accessibilityRole='button'
+              disabled={isExporting}
+              className='h-10 w-10 items-center justify-center active:scale-[0.92]'
+              onPress={() => void exportReport()}
+            >
+              {isExporting ? (
+                <CircularProgressLoader color='#2E7D32' size='small' />
+              ) : (
+                <Screenshot className='text-green' height={40} width={40} />
+              )}
+            </Pressable>
+          )
+        }
       />
 
       <ScrollView
@@ -126,12 +156,42 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
                 <ItemMovementCard
                   key={movement.id}
                   movement={movement}
+                  title={item.name}
                   unit={item.unit?.short || item.unit?.name || ''}
                 />
               ))}
           </View>
         )}
       </ScrollView>
+
+      <View
+        pointerEvents='none'
+        style={{
+          position: 'absolute',
+          left: -9999,
+          top: 0,
+          opacity: 0,
+        }}
+      >
+        {item && (
+          <ExportItemMovementsReportView
+            ref={exportRef}
+            balance={item.current_balance}
+            filterLabel={
+              filter === 'income'
+                ? 'Прихід'
+                : filter === 'expense'
+                  ? 'Списання'
+                  : 'Всі рухи'
+            }
+            generatedAt={generatedAt}
+            itemName={item.name}
+            month={monthTitle}
+            movements={filteredMovements}
+            unit={item.unit?.short || item.unit?.name}
+          />
+        )}
+      </View>
     </View>
   );
 }

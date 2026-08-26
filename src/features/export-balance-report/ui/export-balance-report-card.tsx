@@ -1,48 +1,31 @@
-import type { ComponentType } from 'react';
-import { Pressable, View } from 'react-native';
-import type { SvgProps } from 'react-native-svg';
+import { View } from 'react-native';
 
+import type { Item } from '@/entities/item';
 import { BoxItems } from '@/shared/assets/svg';
-import { type PastelColor, getPastelColorByIndex } from '@/shared/config/pastel-colors';
+import { getPastelColorByIndex } from '@/shared/config/pastel-colors';
 import { cn } from '@/shared/lib/cn';
 import { formatQuantity } from '@/shared/lib/format-number';
 import { Text } from '@/shared/ui/text';
 
-export interface CategoryCardProps {
-  amount?: number | string | null;
-  badgeText?: string;
+interface ExportBalanceReportCardProps {
   className?: string;
-  color?: PastelColor;
-  colorIndex?: number;
-  Icon?: ComponentType<SvgProps>;
-  onPress?: () => void;
-  title: string;
-  unit?: string;
+  colorIndex: number;
+  item: Item;
 }
 
-export function CategoryCard({
-  title,
-  amount,
-  unit = 'кг',
-  badgeText = 'Категорія',
-  Icon = BoxItems,
-  color,
-  colorIndex = 0,
-  onPress,
+export function ExportBalanceReportCard({
   className,
-}: CategoryCardProps) {
-  const activeColor = color ?? getPastelColorByIndex(colorIndex);
-  const hasAmount =
-    amount !== null &&
-    amount !== undefined &&
-    amount !== '' &&
-    amount !== 'немає' &&
-    amount !== 'нет';
+  colorIndex,
+  item,
+}: ExportBalanceReportCardProps) {
+  const activeColor = getPastelColorByIndex(colorIndex);
+  const unitText = item.unit?.short || item.unit?.name || '';
+  const hasPositiveBalance = item.current_balance > 0;
 
-  const content = (
+  return (
     <View
       className={cn(
-        'flex-row items-stretch overflow-hidden rounded-16 border bg-surface shadow-card',
+        'flex-row items-stretch overflow-hidden rounded-16 border bg-surface',
         className,
       )}
       style={{ borderColor: activeColor.border }}
@@ -51,7 +34,7 @@ export function CategoryCard({
         className='w-20 items-center justify-center'
         style={{ backgroundColor: activeColor.soft }}
       >
-        <Icon color={activeColor.primary} height={36} width={36} />
+        <BoxItems color={activeColor.primary} height={36} width={36} />
       </View>
 
       <View className='flex-1 justify-between px-4 py-3.5'>
@@ -64,7 +47,7 @@ export function CategoryCard({
               className='font-medium text-[11px]'
               style={{ color: activeColor.primary }}
             >
-              {badgeText}
+              Категорія
             </Text>
           </View>
         </View>
@@ -74,22 +57,24 @@ export function CategoryCard({
             className='flex-1 pr-2 font-bold text-[18px] text-text-primary'
             numberOfLines={1}
           >
-            {title}
+            {item.name}
           </Text>
 
-          {hasAmount ? (
+          {hasPositiveBalance && (
             <View className='flex-row items-baseline gap-1 shrink-0'>
               <Text className='font-bold text-[20px] text-text-primary'>
-                {typeof amount === 'number' ? formatQuantity(amount) : amount}
+                {formatQuantity(item.current_balance)}
               </Text>
-              {unit && (
+              {Boolean(unitText) && (
                 <Text className='font-normal text-[14px] text-text-muted'>
-                  {unit}
+                  {unitText}
                 </Text>
               )}
             </View>
-          ) : (
-            <Text className='font-normal text-[14px] text-text-muted'>
+          )}
+
+          {!hasPositiveBalance && (
+            <Text className='font-normal text-[16px] text-text-muted'>
               немає
             </Text>
           )}
@@ -97,14 +82,4 @@ export function CategoryCard({
       </View>
     </View>
   );
-
-  if (onPress) {
-    return (
-      <Pressable className='active:scale-[0.99] active:opacity-90' onPress={onPress}>
-        {content}
-      </Pressable>
-    );
-  }
-
-  return content;
 }

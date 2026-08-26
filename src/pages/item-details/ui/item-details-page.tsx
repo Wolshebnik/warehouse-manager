@@ -81,6 +81,7 @@ export function ItemDetailsPage({ itemId }: ItemDetailsPageProps) {
             </View>
 
             <ItemMovementsHistory
+              itemName={item.name}
               movements={item.movements}
               unit={item.unit?.short || item.unit?.name || ''}
               onShowAllPress={() => router.replace(ROUTES.ITEM_MOVEMENTS(id))}

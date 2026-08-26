@@ -1,10 +1,16 @@
 import { useMemo } from 'react';
 
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 import { ItemMovementCard, useGetDayMovements } from '@/entities/item';
+import {
+  ExportDayMovementsReportView,
+  useExportDayMovementsReport,
+} from '@/features/export-day-movements-report';
+import { Screenshot } from '@/shared/assets/svg';
 import { formatFullDate, formatMovementTime } from '@/shared/lib/date';
+import { CircularProgressLoader } from '@/shared/ui/circular-progress-loader';
 import { EmptyView } from '@/shared/ui/empty-view';
 import { ErrorView } from '@/shared/ui/error-view';
 import { LoadingView } from '@/shared/ui/loading-view';
@@ -25,6 +31,13 @@ export function HistoryDayPage({ date: propDate }: HistoryDayPageProps) {
   const dateStr =
     propDate || (Array.isArray(params.date) ? params.date[0] : params.date) || '';
 
+  const {
+    exportRef,
+    exportReport,
+    generatedAt,
+    isExporting,
+  } = useExportDayMovementsReport();
+
   const title = useMemo(() => formatFullDate(dateStr), [dateStr]);
 
   const {
@@ -42,7 +55,24 @@ export function HistoryDayPage({ date: propDate }: HistoryDayPageProps) {
 
   return (
     <View className='flex-1 bg-background'>
-      <AppHeader onBackPress={() => router.back()} />
+      <AppHeader
+        onBackPress={() => router.back()}
+        rightAction={
+          <Pressable
+            accessibilityLabel='Експорт операцій за день'
+            accessibilityRole='button'
+            disabled={isExporting || isLoading || isError}
+            className='h-10 w-10 items-center justify-center active:scale-[0.92]'
+            onPress={() => void exportReport()}
+          >
+            {isExporting ? (
+              <CircularProgressLoader color='#2E7D32' size='small' />
+            ) : (
+              <Screenshot className='text-green' height={40} width={40} />
+            )}
+          </Pressable>
+        }
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -94,6 +124,24 @@ export function HistoryDayPage({ date: propDate }: HistoryDayPageProps) {
             />
           ))}
       </ScrollView>
+
+      <View
+        pointerEvents='none'
+        style={{
+          position: 'absolute',
+          left: -9999,
+          top: 0,
+          opacity: 0,
+        }}
+      >
+        <ExportDayMovementsReportView
+          ref={exportRef}
+          dateStr={dateStr}
+          generatedAt={generatedAt}
+          groups={movementGroups}
+          movements={movements}
+        />
+      </View>
     </View>
   );
 }

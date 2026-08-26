@@ -10,16 +10,18 @@ import { Text } from '@/shared/ui/text';
 
 interface ItemMovementsHistoryProps {
   className?: string;
+  itemName?: string;
   movements: StockMovement[];
   onShowAllPress?: () => void;
   unit?: string;
 }
 
 export function ItemMovementsHistory({
-  movements,
-  unit,
-  onShowAllPress,
   className,
+  itemName,
+  movements,
+  onShowAllPress,
+  unit,
 }: ItemMovementsHistoryProps) {
   return (
     <View className={className}>
@@ -34,7 +36,7 @@ export function ItemMovementsHistory({
         {Boolean(onShowAllPress) && (
           <ButtonBase
             accessibilityLabel='Показати всі рухи'
-            appearance='outline'
+            appearance='solid'
             variant='green'
             size='sm'
             radiusClassName='rounded-full'
@@ -55,6 +57,7 @@ export function ItemMovementsHistory({
           key={movement.id}
           className='mb-1.5'
           movement={movement}
+          title={itemName}
           unit={unit}
         />
       ))}
