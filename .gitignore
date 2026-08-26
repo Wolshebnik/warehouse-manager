@@ -3,6 +3,16 @@ node_modules/
 *.env*
 !.env.example
 android/
+ios/
+dist/
+build/
+*.apk
+*.aab
+.gradle/
+local.properties
 graphify-out/
 .codex/
 .agents/
+scripts/
+
+

@@ -129,7 +129,8 @@ export function ItemsPage() {
               variant='green'
               accessibilityLabel='Додати товар'
               accessibilityRole='button'
-              className='flex-row items-center gap-1.5 rounded-12 px-3 py-2.5'
+              radiusClassName='rounded-12'
+              className='flex-row items-center gap-1.5 px-3 py-2.5'
               onPress={() => {
                 setEditingItem(null);
                 setIsAddOpen(true);

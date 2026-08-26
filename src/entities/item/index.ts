@@ -1,14 +1,20 @@
 export {
   createItemSchema,
+  dayMovementItemSchema,
+  dayMovementsSchema,
   itemDetailsSchema,
   itemSchema,
   itemsSchema,
+  monthMovementSchema,
+  monthMovementsSchema,
   stockMovementSchema,
   unitSchema,
   updateItemSchema,
   type CreateItemDto,
+  type DayMovementItem,
   type Item,
   type ItemDetails,
+  type MonthMovement,
   type MovementType,
   type StockMovement,
   type UpdateItemDto,
@@ -25,6 +31,9 @@ export {
   type GetItemByIdOptions,
 } from './api/get-item-by-id';
 
+export { getDayMovements } from './api/get-day-movements';
+export { getMonthMovements } from './api/get-month-movements';
+
 export {
   createExpense,
   createIncome,
@@ -35,9 +44,11 @@ export { reorderItems, type ReorderItemInput } from './api/reorder-items';
 
 export {
   archivedItemQueryOptions,
+  dayMovementsQueryOptions,
   itemDetailQueryOptions,
   itemKeys,
   itemQueryOptions,
+  monthMovementsQueryOptions,
 } from './model/query-keys';
 
 export {
@@ -59,7 +70,11 @@ export { useGetArchivedItems, useGetItems } from './model/use-get-items';
 
 export { useGetItem, useItemById } from './model/use-get-item';
 
+export { useGetDayMovements } from './model/use-get-day-movements';
+export { useGetMonthMovements } from './model/use-get-month-movements';
+
 export { ItemBalanceCard } from './ui/item-balance-card';
 
 export { ItemMovementCard } from './ui/item-movement-card';
+
 

@@ -5,6 +5,7 @@ import type { SvgProps } from 'react-native-svg';
 import { BoxItems } from '@/shared/assets/svg';
 import { type PastelColor, getPastelColorByIndex } from '@/shared/config/pastel-colors';
 import { cn } from '@/shared/lib/cn';
+import { formatQuantity } from '@/shared/lib/format-number';
 import { Text } from '@/shared/ui/text';
 
 export interface CategoryCardProps {
@@ -23,7 +24,7 @@ export function CategoryCard({
   title,
   amount,
   unit = 'кг',
-  badgeText = 'Категория',
+  badgeText = 'Категорія',
   Icon = BoxItems,
   color,
   colorIndex = 0,
@@ -31,12 +32,17 @@ export function CategoryCard({
   className,
 }: CategoryCardProps) {
   const activeColor = color ?? getPastelColorByIndex(colorIndex);
-  const hasAmount = amount !== null && amount !== undefined && amount !== '' && amount !== 'нет';
+  const hasAmount =
+    amount !== null &&
+    amount !== undefined &&
+    amount !== '' &&
+    amount !== 'немає' &&
+    amount !== 'нет';
 
   const content = (
     <View
       className={cn(
-        'flex-row items-stretch overflow-hidden rounded-16 border bg-surface',
+        'flex-row items-stretch overflow-hidden rounded-16 border bg-surface shadow-card',
         className,
       )}
       style={{ borderColor: activeColor.border }}
@@ -74,7 +80,7 @@ export function CategoryCard({
           {hasAmount ? (
             <View className='flex-row items-baseline gap-1 shrink-0'>
               <Text className='font-bold text-[20px] text-text-primary'>
-                {typeof amount === 'number' ? amount.toLocaleString('ru-RU') : amount}
+                {typeof amount === 'number' ? formatQuantity(amount) : amount}
               </Text>
               {unit && (
                 <Text className='font-normal text-[14px] text-text-muted'>
@@ -84,7 +90,7 @@ export function CategoryCard({
             </View>
           ) : (
             <Text className='font-normal text-[14px] text-text-muted'>
-              нет
+              немає
             </Text>
           )}
         </View>

@@ -1,13 +1,15 @@
-import { useState } from 'react';
-
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { useGetItems } from '@/entities/item';
-import { AddItemSheet } from '@/features/add-item';
-import { Plus } from '@/shared/assets/svg';
+import {
+  ExportBalanceReportView,
+  useExportBalanceReport,
+} from '@/features/export-balance-report';
+import { Screenshot } from '@/shared/assets/svg';
 import { ROUTES } from '@/shared/config/routes';
 import { CategoryCard } from '@/shared/ui/category-card';
+import { CircularProgressLoader } from '@/shared/ui/circular-progress-loader';
 import { EmptyView } from '@/shared/ui/empty-view';
 import { ErrorView } from '@/shared/ui/error-view';
 import { LoadingView } from '@/shared/ui/loading-view';
@@ -16,7 +18,13 @@ import { AppHeader } from '@/widgets/header';
 
 export function HomePage() {
   const router = useRouter();
-  const [isAddOpen, setIsAddOpen] = useState(false);
+  const {
+    exportRef,
+    exportReport,
+    generatedAt,
+    handleLayout,
+    isExporting,
+  } = useExportBalanceReport();
   const {
     data: items = [],
     isError,
@@ -30,12 +38,17 @@ export function HomePage() {
       <AppHeader
         rightAction={
           <Pressable
-            accessibilityLabel='Додати'
+            accessibilityLabel='Експорт'
             accessibilityRole='button'
-            className='h-10 w-10 items-center justify-center rounded-12 border border-green active:scale-[0.94]'
-            onPress={() => setIsAddOpen(true)}
+            disabled={isExporting}
+            className='h-10 w-10 items-center justify-center active:scale-[0.92]'
+            onPress={() => void exportReport()}
           >
-            <Plus className='text-green' height={20} width={20} />
+            {isExporting ? (
+              <CircularProgressLoader color='#2E7D32' size='small' />
+            ) : (
+              <Screenshot className='text-green' height={40} width={40} />
+            )}
           </Pressable>
         }
       />
@@ -80,10 +93,23 @@ export function HomePage() {
           ))}
       </ScrollView>
 
-      <AddItemSheet
-        isOpen={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-      />
+      <View
+        pointerEvents='none'
+        style={{
+          position: 'absolute',
+          left: -9999,
+          top: 0,
+          opacity: 0,
+        }}
+      >
+        <ExportBalanceReportView
+          ref={exportRef}
+          generatedAt={generatedAt}
+          items={items}
+          onLayout={handleLayout}
+        />
+      </View>
     </View>
   );
 }
+

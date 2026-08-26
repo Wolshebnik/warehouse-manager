@@ -2,6 +2,12 @@ export type ButtonVariant = 'green' | 'red' | 'orange' | 'blue' | 'neutral';
 export type ButtonAppearance = 'solid' | 'outline';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
+export const buttonSizeContainerClassNames: Record<ButtonSize, string> = {
+  sm: 'min-h-[32px] px-3.5 py-1',
+  md: 'min-h-[48px] px-4 py-3',
+  lg: 'min-h-[52px] px-5 py-3.5',
+};
+
 export const buttonSizeTextClassNames: Record<ButtonSize, string> = {
   sm: 'text-[13px] leading-4',
   md: 'text-[15px] leading-[22px]',

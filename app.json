@@ -14,7 +14,8 @@
           "hidden": false,
           "style": "dark"
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "android": {
       "package": "com.warehousemanager.app"

@@ -61,9 +61,38 @@ export const updateItemSchema = z.object({
   is_archived: z.boolean().optional(),
 });
 
+export const dayMovementItemSchema = z.object({
+  id: z.string(),
+  item_id: z.string(),
+  type: z.enum(['income', 'expense']),
+  quantity: z.coerce.number(),
+  description: z.string().nullable(),
+  created_at: z.string(),
+  item: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      unit: unitSchema.nullable().optional(),
+    })
+    .nullable()
+    .optional(),
+});
+
+export const dayMovementsSchema = z.array(dayMovementItemSchema);
+
+export const monthMovementSchema = z.object({
+  created_at: z.string(),
+  id: z.string(),
+  type: z.enum(['income', 'expense']),
+});
+
+export const monthMovementsSchema = z.array(monthMovementSchema);
+
 export type Item = z.infer<typeof itemSchema>;
 export type ItemDetails = z.infer<typeof itemDetailsSchema>;
 export type StockMovement = z.infer<typeof stockMovementSchema>;
+export type DayMovementItem = z.infer<typeof dayMovementItemSchema>;
+export type MonthMovement = z.infer<typeof monthMovementSchema>;
 export type MovementType = StockMovement['type'];
 export type CreateItemDto = z.infer<typeof createItemSchema>;
 export type UpdateItemDto = z.infer<typeof updateItemSchema>;

@@ -31,7 +31,7 @@ export function ItemActionCard({
       accessibilityLabel={displayTitle}
       accessibilityRole='button'
       className={cn(
-        'flex-1 items-center justify-center overflow-hidden rounded-20 border p-4 active:scale-[0.98]',
+        'flex-1 items-center justify-center overflow-hidden rounded-20 border p-4 shadow-card active:scale-[0.98]',
         isIncome
           ? 'border-green-border bg-green-tint'
           : 'border-red-border bg-red-tint',

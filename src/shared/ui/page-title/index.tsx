@@ -26,7 +26,7 @@ export function PageTitle({
         className,
       )}
     >
-      <View className='flex-1 gap-1'>
+      <View className={cn('gap-1', rightAction && 'flex-1')}>
         <Text className='font-bold text-[24px] leading-6 text-text-primary'>
           {title}
         </Text>

@@ -52,9 +52,12 @@ export function ItemsArchivedPage() {
               <Pressable
                 key={item.id}
                 className={cn(
-                  'flex-row items-center justify-between px-4 py-4 active:bg-neutral-soft',
+                  'flex-row items-center justify-between px-4 py-4',
                   index < items.length - 1 && 'border-b border-border',
                 )}
+                android_ripple={{
+                  color: 'rgba(0, 0, 0, 0.05)',
+                }}
                 onPress={() => setSelectedItem(item)}
               >
                 <View className='flex-1 pr-4'>

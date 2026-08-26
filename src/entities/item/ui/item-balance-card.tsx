@@ -23,7 +23,7 @@ export function ItemBalanceCard({
   return (
     <View
       className={cn(
-        'relative mb-4 flex-row items-center justify-between overflow-hidden rounded-24 border border-green-border bg-surface p-5',
+        'relative mb-4 flex-row items-center justify-between overflow-hidden rounded-24 border border-green-border bg-surface p-5 shadow-card',
         className,
       )}
     >
