@@ -58,39 +58,41 @@ export function HomePage() {
         contentContainerClassName='p-4 pb-8'
         className='flex-1'
       >
-        <PageTitle
-          title='Залишки'
-          subtitle='Поточний стан складу'
-          className='mb-4'
-        />
-
-        {isLoading && <LoadingView />}
-
-        {isError && (
-          <ErrorView
-            message='Не вдалося завантажити залишки.'
-            isRetrying={isRefetching}
-            onRetry={() => void refetch()}
+        <View className='w-full max-w-2xl self-center'>
+          <PageTitle
+            title='Залишки'
+            subtitle='Поточний стан складу'
+            className='mb-4'
           />
-        )}
 
-        {!isLoading && !isError && items.length === 0 && (
-          <EmptyView message='Товарів поки немає' />
-        )}
+          {isLoading && <LoadingView />}
 
-        {!isLoading &&
-          !isError &&
-          items.map((item, index) => (
-            <CategoryCard
-              key={item.id}
-              title={item.name}
-              amount={item.current_balance > 0 ? item.current_balance : null}
-              unit={item.unit?.short || item.unit?.name || 'кг'}
-              colorIndex={index}
-              className='mb-3'
-              onPress={() => router.push(ROUTES.ITEM_DETAILS(item.id))}
+          {isError && (
+            <ErrorView
+              message='Не вдалося завантажити залишки.'
+              isRetrying={isRefetching}
+              onRetry={() => void refetch()}
             />
-          ))}
+          )}
+
+          {!isLoading && !isError && items.length === 0 && (
+            <EmptyView message='Товарів поки немає' />
+          )}
+
+          {!isLoading &&
+            !isError &&
+            items.map((item, index) => (
+              <CategoryCard
+                key={item.id}
+                title={item.name}
+                amount={item.current_balance > 0 ? item.current_balance : null}
+                unit={item.unit?.short || item.unit?.name || 'кг'}
+                colorIndex={index}
+                className='mb-3'
+                onPress={() => router.push(ROUTES.ITEM_DETAILS(item.id))}
+              />
+            ))}
+        </View>
       </ScrollView>
 
       <View

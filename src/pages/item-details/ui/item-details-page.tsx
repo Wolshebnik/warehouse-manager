@@ -48,46 +48,48 @@ export function ItemDetailsPage({ itemId }: ItemDetailsPageProps) {
         contentContainerClassName='p-4 pb-8'
         className='flex-1'
       >
-        {isLoading && <LoadingView />}
+        <View className='w-full max-w-2xl self-center'>
+          {isLoading && <LoadingView />}
 
-        {isError && (
-          <ErrorView
-            message='Не вдалося завантажити дані товару.'
-            isRetrying={isRefetching}
-            onRetry={() => void refetch()}
-          />
-        )}
-
-        {!isLoading && !isError && !item && (
-          <EmptyView message='Товар не знайдено' />
-        )}
-
-        {!isLoading && !isError && item && (
-          <View>
-            <ItemBalanceCard
-              balance={item.current_balance}
-              unit={item.unit?.short || item.unit?.name}
+          {isError && (
+            <ErrorView
+              message='Не вдалося завантажити дані товару.'
+              isRetrying={isRefetching}
+              onRetry={() => void refetch()}
             />
+          )}
 
-            <View className='mb-6 flex-row gap-3'>
-              <ItemActionCard
-                type='income'
-                onPress={() => setIsIncomeOpen(true)}
+          {!isLoading && !isError && !item && (
+            <EmptyView message='Товар не знайдено' />
+          )}
+
+          {!isLoading && !isError && item && (
+            <View>
+              <ItemBalanceCard
+                balance={item.current_balance}
+                unit={item.unit?.short || item.unit?.name}
               />
-              <ItemActionCard
-                type='expense'
-                onPress={() => setIsExpenseOpen(true)}
+
+              <View className='mb-6 flex-row gap-3'>
+                <ItemActionCard
+                  type='income'
+                  onPress={() => setIsIncomeOpen(true)}
+                />
+                <ItemActionCard
+                  type='expense'
+                  onPress={() => setIsExpenseOpen(true)}
+                />
+              </View>
+
+              <ItemMovementsHistory
+                itemName={item.name}
+                movements={item.movements}
+                unit={item.unit?.short || item.unit?.name || ''}
+                onShowAllPress={() => router.replace(ROUTES.ITEM_MOVEMENTS(id))}
               />
             </View>
-
-            <ItemMovementsHistory
-              itemName={item.name}
-              movements={item.movements}
-              unit={item.unit?.short || item.unit?.name || ''}
-              onShowAllPress={() => router.replace(ROUTES.ITEM_MOVEMENTS(id))}
-            />
-          </View>
-        )}
+          )}
+        </View>
       </ScrollView>
 
       <IncomeMaterialSheet

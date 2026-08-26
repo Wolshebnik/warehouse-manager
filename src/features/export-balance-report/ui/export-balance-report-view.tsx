@@ -46,7 +46,7 @@ export const ExportBalanceReportView = forwardRef<View, ExportBalanceReportViewP
         </View>
 
         <View className='mb-6 items-center'>
-          <Text className='mb-1 font-bold text-[28px] text-text-primary'>
+          <Text className='mb-1 text-center font-bold text-[20px] leading-6 text-text-primary'>
             {formatFullDate(generatedAt)}
           </Text>
 
