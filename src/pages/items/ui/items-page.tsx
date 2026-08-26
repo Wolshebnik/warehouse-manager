@@ -120,62 +120,64 @@ export function ItemsPage() {
         contentContainerClassName='p-4 pb-8'
         className='flex-1'
       >
-        <PageTitle
-          title='Товари'
-          subtitle='Список товарів для обліку'
-          className='mb-6'
-          rightAction={
-            <ButtonBase
-              variant='green'
-              accessibilityLabel='Додати товар'
-              accessibilityRole='button'
-              radiusClassName='rounded-12'
-              className='flex-row items-center gap-1.5 px-3 py-2.5'
-              onPress={() => {
-                setEditingItem(null);
-                setIsAddOpen(true);
-              }}
-            >
-              <Plus className='text-white' height={18} width={18} />
-              <Text className='font-semibold text-[14px] leading-[18px] text-white'>
-                Додати товар
-              </Text>
-            </ButtonBase>
-          }
-        />
-
-        {isLoading && <LoadingView />}
-
-        {isError && (
-          <ErrorView
-            message='Не вдалося завантажити товари.'
-            isRetrying={isRefetching}
-            onRetry={() => void refetch()}
+        <View className='w-full max-w-2xl self-center'>
+          <PageTitle
+            title='Товари'
+            subtitle='Список товарів для обліку'
+            className='mb-6'
+            rightAction={
+              <ButtonBase
+                variant='green'
+                accessibilityLabel='Додати товар'
+                accessibilityRole='button'
+                radiusClassName='rounded-12'
+                className='flex-row items-center gap-1.5 px-3 py-2.5'
+                onPress={() => {
+                  setEditingItem(null);
+                  setIsAddOpen(true);
+                }}
+              >
+                <Plus className='text-white' height={18} width={18} />
+                <Text className='font-semibold text-[14px] leading-[18px] text-white'>
+                  Додати товар
+                </Text>
+              </ButtonBase>
+            }
           />
-        )}
 
-        {!isLoading && !isError && items.length > 0 && (
-          <View className='mb-6 overflow-visible'>
-            <SortableList
-              key={items.map((item) => item.id).sort().join(':')}
-              data={items}
-              itemHeight={70}
-              useFlatList={false}
-              renderItem={renderItem}
-              scrollEnabled={false}
-              style={{ backgroundColor: 'transparent', overflow: 'visible' }}
-              contentContainerStyle={{ overflow: 'visible' }}
+          {isLoading && <LoadingView />}
+
+          {isError && (
+            <ErrorView
+              message='Не вдалося завантажити товари.'
+              isRetrying={isRefetching}
+              onRetry={() => void refetch()}
             />
-          </View>
-        )}
+          )}
 
-        {!isLoading && !isError && items.length === 0 && (
-          <EmptyView message='Товарів поки немає' />
-        )}
+          {!isLoading && !isError && items.length > 0 && (
+            <View className='mb-6 overflow-visible'>
+              <SortableList
+                key={items.map((item) => item.id).sort().join(':')}
+                data={items}
+                itemHeight={70}
+                useFlatList={false}
+                renderItem={renderItem}
+                scrollEnabled={false}
+                style={{ backgroundColor: 'transparent', overflow: 'visible' }}
+                contentContainerStyle={{ overflow: 'visible' }}
+              />
+            </View>
+          )}
 
-        {archivedItems.length > 0 && (
-          <ArchivedItemsCard count={archivedItems.length} />
-        )}
+          {!isLoading && !isError && items.length === 0 && (
+            <EmptyView message='Товарів поки немає' />
+          )}
+
+          {archivedItems.length > 0 && (
+            <ArchivedItemsCard count={archivedItems.length} />
+          )}
+        </View>
       </ScrollView>
 
       <AddItemSheet

@@ -17,7 +17,7 @@ export function BottomNavigation() {
 
   return (
     <View className='border-t border-border bg-surface'>
-      <View className='flex-row'>
+      <View className='w-full max-w-2xl flex-row self-center'>
         {navigationItems.map(({ href, label, Icon }) => {
           const isHomeTab = href === ROUTES.HOME;
           const isHomeRoute =

@@ -115,53 +115,55 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
         contentContainerClassName='p-4 pb-8'
         className='flex-1'
       >
-        {isLoading && !item && <LoadingView />}
+        <View className='w-full max-w-2xl self-center'>
+          {isLoading && !item && <LoadingView />}
 
-        {isError && !item && (
-          <ErrorView
-            message='Не вдалося завантажити дані рухів.'
-            isRetrying={isRefetching}
-            onRetry={() => void refetch()}
-          />
-        )}
-
-        {item && (
-          <View>
-            <ItemBalanceCard
-              title={item.name}
-              balance={item.current_balance}
-              unit={item.unit?.short || item.unit?.name}
+          {isError && !item && (
+            <ErrorView
+              message='Не вдалося завантажити дані рухів.'
+              isRetrying={isRefetching}
+              onRetry={() => void refetch()}
             />
+          )}
 
-            <ItemMovementsFilterPills selected={filter} onSelect={setFilter} />
+          {item && (
+            <View>
+              <ItemBalanceCard
+                title={item.name}
+                balance={item.current_balance}
+                unit={item.unit?.short || item.unit?.name}
+              />
 
-            <MonthSelector
-              className='mb-4'
-              month={monthTitle}
-              variant='card'
-              onNextMonth={handleNextMonth}
-              onPrevMonth={handlePrevMonth}
-              onResetMonth={handleResetMonth}
-            />
+              <ItemMovementsFilterPills selected={filter} onSelect={setFilter} />
 
-            {isFetching && <LoadingView className='py-8' />}
+              <MonthSelector
+                className='mb-4'
+                month={monthTitle}
+                variant='card'
+                onNextMonth={handleNextMonth}
+                onPrevMonth={handlePrevMonth}
+                onResetMonth={handleResetMonth}
+              />
 
-            {!isFetching && filteredMovements.length === 0 && (
-              <EmptyView message='Рухів за вибраним фільтром не знайдено' />
-            )}
+              {isFetching && <LoadingView className='py-8' />}
 
-            {!isFetching &&
-              filteredMovements.length > 0 &&
-              filteredMovements.map((movement) => (
-                <ItemMovementCard
-                  key={movement.id}
-                  movement={movement}
-                  title={item.name}
-                  unit={item.unit?.short || item.unit?.name || ''}
-                />
-              ))}
-          </View>
-        )}
+              {!isFetching && filteredMovements.length === 0 && (
+                <EmptyView message='Рухів за вибраним фільтром не знайдено' />
+              )}
+
+              {!isFetching &&
+                filteredMovements.length > 0 &&
+                filteredMovements.map((movement) => (
+                  <ItemMovementCard
+                    key={movement.id}
+                    movement={movement}
+                    title={item.name}
+                    unit={item.unit?.short || item.unit?.name || ''}
+                  />
+                ))}
+            </View>
+          )}
+        </View>
       </ScrollView>
 
       <View

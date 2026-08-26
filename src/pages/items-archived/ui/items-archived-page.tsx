@@ -30,57 +30,59 @@ export function ItemsArchivedPage() {
         contentContainerClassName='p-4 pb-8'
         className='flex-1'
       >
-        <PageTitle
-          title='Архів товарів'
-          subtitle='Список архівованих товарів'
-          className='mb-6'
-        />
-
-        {isLoading && <LoadingView />}
-
-        {isError && (
-          <ErrorView
-            message='Не вдалося завантажити архів товарів.'
-            isRetrying={isRefetching}
-            onRetry={() => void refetch()}
+        <View className='w-full max-w-2xl self-center'>
+          <PageTitle
+            title='Архів товарів'
+            subtitle='Список архівованих товарів'
+            className='mb-6'
           />
-        )}
 
-        {!isLoading && !isError && items.length > 0 && (
-          <View className='overflow-hidden rounded-16 border border-border bg-surface shadow-card'>
-            {items.map((item, index) => (
-              <Pressable
-                key={item.id}
-                className={cn(
-                  'flex-row items-center justify-between px-4 py-4',
-                  index < items.length - 1 && 'border-b border-border',
-                )}
-                android_ripple={{
-                  color: 'rgba(0, 0, 0, 0.05)',
-                }}
-                onPress={() => setSelectedItem(item)}
-              >
-                <View className='flex-1 pr-4'>
-                  <Text className='font-medium text-[16px] text-text-primary'>
-                    {item.name}
-                  </Text>
-                  {item.description && (
-                    <Text className='mt-0.5 font-normal text-[13px] text-text-muted'>
-                      {item.description}
-                    </Text>
+          {isLoading && <LoadingView />}
+
+          {isError && (
+            <ErrorView
+              message='Не вдалося завантажити архів товарів.'
+              isRetrying={isRefetching}
+              onRetry={() => void refetch()}
+            />
+          )}
+
+          {!isLoading && !isError && items.length > 0 && (
+            <View className='overflow-hidden rounded-16 border border-border bg-surface shadow-card'>
+              {items.map((item, index) => (
+                <Pressable
+                  key={item.id}
+                  className={cn(
+                    'flex-row items-center justify-between px-4 py-4',
+                    index < items.length - 1 && 'border-b border-border',
                   )}
-                </View>
-                <Text className='font-medium text-[15px] text-text-muted'>
-                  {item.unit?.short || item.unit?.name || ''}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        )}
+                  android_ripple={{
+                    color: 'rgba(0, 0, 0, 0.05)',
+                  }}
+                  onPress={() => setSelectedItem(item)}
+                >
+                  <View className='flex-1 pr-4'>
+                    <Text className='font-medium text-[16px] text-text-primary'>
+                      {item.name}
+                    </Text>
+                    {item.description && (
+                      <Text className='mt-0.5 font-normal text-[13px] text-text-muted'>
+                        {item.description}
+                      </Text>
+                    )}
+                  </View>
+                  <Text className='font-medium text-[15px] text-text-muted'>
+                    {item.unit?.short || item.unit?.name || ''}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
 
-        {!isLoading && !isError && items.length === 0 && (
-          <EmptyView message='Архів порожній' />
-        )}
+          {!isLoading && !isError && items.length === 0 && (
+            <EmptyView message='Архів порожній' />
+          )}
+        </View>
       </ScrollView>
 
       <AddItemSheet

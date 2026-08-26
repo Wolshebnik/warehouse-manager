@@ -40,12 +40,14 @@ export function HistoryPage() {
         contentContainerClassName='p-4 pb-8'
         className='flex-1'
       >
-        <Calendar
-          currentMonth={currentMonth}
-          markers={markers}
-          onMonthChange={setCurrentMonth}
-          onSelectDate={handleSelectDate}
-        />
+        <View className='w-full max-w-2xl self-center'>
+          <Calendar
+            currentMonth={currentMonth}
+            markers={markers}
+            onMonthChange={setCurrentMonth}
+            onSelectDate={handleSelectDate}
+          />
+        </View>
       </ScrollView>
     </View>
   );

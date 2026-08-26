@@ -79,50 +79,52 @@ export function HistoryDayPage({ date: propDate }: HistoryDayPageProps) {
         contentContainerClassName='p-4 pb-8'
         className='flex-1'
       >
-        <PageTitle
-          title={title}
-          className='mb-4'
-        />
-
-        {!isLoading &&
-          !isError &&
-          movementGroups.map((group) => (
-            <DayMovementGroupCard key={group.id} group={group} />
-          ))}
-
-        {isLoading && <LoadingView />}
-
-        {isError && (
-          <ErrorView
-            message='Не вдалося завантажити операції за день.'
-            isRetrying={isRefetching}
-            onRetry={() => void refetch()}
+        <View className='w-full max-w-2xl self-center'>
+          <PageTitle
+            title={title}
+            className='mb-4'
           />
-        )}
 
-        {!isLoading && !isError && movements.length === 0 && (
-          <EmptyView message='Операцій за цей день не знайдено' />
-        )}
+          {!isLoading &&
+            !isError &&
+            movementGroups.map((group) => (
+              <DayMovementGroupCard key={group.id} group={group} />
+            ))}
 
-        {!isLoading && !isError && movements.length > 0 && (
-          <Text className='mb-2 font-bold text-[16px] text-text-primary'>
-            Усі операції за день
-          </Text>
-        )}
+          {isLoading && <LoadingView />}
 
-        {!isLoading &&
-          !isError &&
-          movements.map((movement) => (
-            <ItemMovementCard
-              key={movement.id}
-              className='mb-1.5'
-              movement={movement}
-              showDate={false}
-              title={movement.item?.name ?? 'Товар'}
-              time={formatMovementTime(movement.created_at)}
-              unit={movement.item?.unit?.short || movement.item?.unit?.name || ''}
+          {isError && (
+            <ErrorView
+              message='Не вдалося завантажити операції за день.'
+              isRetrying={isRefetching}
+              onRetry={() => void refetch()}
             />
-          ))}
+          )}
+
+          {!isLoading && !isError && movements.length === 0 && (
+            <EmptyView message='Операцій за цей день не знайдено' />
+          )}
+
+          {!isLoading && !isError && movements.length > 0 && (
+            <Text className='mb-2 font-bold text-[16px] text-text-primary'>
+              Усі операції за день
+            </Text>
+          )}
+
+          {!isLoading &&
+            !isError &&
+            movements.map((movement) => (
+              <ItemMovementCard
+                key={movement.id}
+                className='mb-1.5'
+                movement={movement}
+                showDate={false}
+                title={movement.item?.name ?? 'Товар'}
+                time={formatMovementTime(movement.created_at)}
+                unit={movement.item?.unit?.short || movement.item?.unit?.name || ''}
+              />
+            ))}
+        </View>
       </ScrollView>
 
       <View

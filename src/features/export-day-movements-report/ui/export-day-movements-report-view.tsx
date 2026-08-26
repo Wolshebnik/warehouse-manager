@@ -60,8 +60,8 @@ export const ExportDayMovementsReportView = forwardRef<
         </View>
       </View>
 
-      <View className='mb-4'>
-        <Text className='font-bold text-[28px] text-text-primary'>
+      <View className='mb-4 items-center'>
+        <Text className='text-center font-bold text-[20px] leading-6 text-text-primary'>
           {dateTitle}
         </Text>
       </View>
