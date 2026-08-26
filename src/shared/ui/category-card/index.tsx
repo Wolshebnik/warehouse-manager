@@ -36,7 +36,7 @@ export function CategoryCard({
   const content = (
     <View
       className={cn(
-        'flex-row items-stretch overflow-hidden rounded-16 border bg-surface',
+        'flex-row items-stretch overflow-hidden rounded-16 border bg-surface shadow-card',
         className,
       )}
       style={{ borderColor: activeColor.border }}

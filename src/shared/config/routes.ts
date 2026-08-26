@@ -7,6 +7,7 @@ export const ROUTES = {
   SETTINGS_UNITS: '/settings/units',
   ITEM_DETAILS: (id: string) => `/items/${id}` as const,
   ITEM_MOVEMENTS: (id: string) => `/items/${id}/movements` as const,
+  HISTORY_DAY: (date: string) => `/history/${date}` as const,
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

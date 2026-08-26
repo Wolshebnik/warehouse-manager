@@ -133,9 +133,11 @@ export function Select<T = string | number>({
                     'flex-row items-center justify-between px-4 py-3',
                     index > 0 && 'border-t border-border',
                     isSelected && 'bg-green-soft',
-                    !isSelected && !isDisabled && 'active:bg-neutral-soft',
                     isDisabled && 'opacity-40',
                   )}
+                  android_ripple={{
+                    color: 'rgba(0, 0, 0, 0.06)',
+                  }}
                   onPress={() => {
                     onChange(option.value);
                     setIsOpen(false);

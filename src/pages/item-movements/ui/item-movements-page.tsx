@@ -13,13 +13,13 @@ import { dayjs, formatMonthName, getMonthDateRange } from '@/shared/lib/date';
 import { EmptyView } from '@/shared/ui/empty-view';
 import { ErrorView } from '@/shared/ui/error-view';
 import { LoadingView } from '@/shared/ui/loading-view';
+import { MonthSelector } from '@/shared/ui/month-selector';
 import { AppHeader } from '@/widgets/header';
 
 import {
   ItemMovementsFilterPills,
   type MovementFilterType,
 } from './item-movements-filter-pills';
-import { ItemMovementsMonthSelector } from './item-movements-month-selector';
 
 interface ItemMovementsPageProps {
   itemId?: string;
@@ -50,6 +50,10 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
 
   const handleNextMonth = () => {
     setSelectedDate((prev) => prev.add(1, 'month'));
+  };
+
+  const handleResetMonth = () => {
+    setSelectedDate(dayjs());
   };
 
   const {
@@ -101,10 +105,13 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
 
             <ItemMovementsFilterPills selected={filter} onSelect={setFilter} />
 
-            <ItemMovementsMonthSelector
+            <MonthSelector
+              className='mb-4'
               month={monthTitle}
-              onPrevMonth={handlePrevMonth}
+              variant='card'
               onNextMonth={handleNextMonth}
+              onPrevMonth={handlePrevMonth}
+              onResetMonth={handleResetMonth}
             />
 
             {isFetching && <LoadingView className='py-8' />}

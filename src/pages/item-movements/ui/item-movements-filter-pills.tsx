@@ -1,7 +1,7 @@
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { cn } from '@/shared/lib/cn';
-import { Text } from '@/shared/ui/text';
+import { ButtonBase } from '@/shared/ui/button-base';
 
 export type MovementFilterType = 'all' | 'income' | 'expense';
 
@@ -37,30 +37,30 @@ export function ItemMovementsFilterPills({
         {FILTER_OPTIONS.map((option) => {
           const isSelected = selected === option.value;
           return (
-            <Pressable
+            <ButtonBase
               key={option.value}
-              accessibilityRole='button'
+              accessibilityLabel={option.label}
               accessibilityState={{ selected: isSelected }}
+              appearance={isSelected ? 'solid' : 'outline'}
+              variant='green'
+              size='sm'
+              radiusClassName='rounded-12'
               className={cn(
-                'rounded-12 px-4 py-2',
-                isSelected
-                  ? 'bg-green'
-                  : 'border border-border bg-surface active:bg-neutral-soft',
+                'px-4 py-2',
+                !isSelected && 'border-border bg-surface',
+              )}
+              textClassName={cn(
+                'font-medium text-[14px]',
+                isSelected ? 'font-semibold text-white' : 'text-text-primary',
               )}
               onPress={() => onSelect(option.value)}
             >
-              <Text
-                className={cn(
-                  'font-medium text-[14px]',
-                  isSelected ? 'text-white font-semibold' : 'text-text-primary',
-                )}
-              >
-                {option.label}
-              </Text>
-            </Pressable>
+              {option.label}
+            </ButtonBase>
           );
         })}
       </ScrollView>
     </View>
   );
 }
+

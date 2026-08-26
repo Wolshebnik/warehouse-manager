@@ -67,7 +67,11 @@ export function BottomSheetTablet({
             <Pressable
               accessibilityLabel='Закрити панель'
               accessibilityRole='button'
-              className='ml-auto h-8 w-8 shrink-0 items-center justify-center rounded-full active:bg-neutral-soft'
+              className='ml-auto h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full'
+              android_ripple={{
+                borderless: false,
+                color: 'rgba(0, 0, 0, 0.08)',
+              }}
               onPress={onClose}
             >
               <X className='text-text-primary' height={16} width={16} />

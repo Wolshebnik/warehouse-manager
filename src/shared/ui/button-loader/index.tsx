@@ -4,18 +4,18 @@ import { ButtonBase, type ButtonBaseProps } from '@/shared/ui/button-base';
 import { CircularProgressLoader } from '@/shared/ui/circular-progress-loader';
 
 export interface ButtonLoaderProps extends ButtonBaseProps {
-  loading?: boolean;
   children?: ReactNode;
   loaderColor?: string;
   loaderSize?: 'small' | 'large';
+  loading?: boolean;
 }
 
 export function ButtonLoader({
   children,
-  loading,
+  loading = false,
   disabled,
-  loaderColor,
-  loaderSize,
+  loaderColor = '#FFFFFF',
+  loaderSize = 'small',
   ...props
 }: ButtonLoaderProps) {
   return (
