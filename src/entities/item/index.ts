@@ -40,6 +40,11 @@ export {
   type CreateStockMovementParams,
 } from './api/apply-stock-movement';
 
+export {
+  updateStockMovement,
+  type UpdateStockMovementParams,
+} from './api/update-stock-movement';
+
 export { reorderItems, type ReorderItemInput } from './api/reorder-items';
 
 export {
@@ -62,6 +67,7 @@ export { useCreateItem } from './model/use-create-item';
 export {
   useCreateExpense,
   useCreateIncome,
+  useUpdateStockMovement,
 } from './model/use-stock-movement';
 
 export { useReorderItems } from './model/use-reorder-items';

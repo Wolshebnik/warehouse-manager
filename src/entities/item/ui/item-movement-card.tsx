@@ -10,6 +10,7 @@ interface ItemMovementCardProps {
   className?: string;
   description?: string;
   movement: StockMovement | DayMovementItem;
+  onPress?: () => void;
   showDate?: boolean;
   time?: string;
   title?: string;
@@ -55,6 +56,7 @@ export function ItemMovementCard({
   className,
   description: customDescription,
   movement,
+  onPress,
   showDate = true,
   time,
   title,
@@ -76,6 +78,7 @@ export function ItemMovementCard({
       description={description}
       date={date}
       icon={movementIcons[type]}
+      onPress={onPress}
       time={displayTime}
       title={displayTitle}
       type={type}

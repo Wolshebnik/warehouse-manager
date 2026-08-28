@@ -5,6 +5,10 @@ import {
   createIncome,
   type CreateStockMovementParams,
 } from '../api/apply-stock-movement';
+import {
+  updateStockMovement,
+  type UpdateStockMovementParams,
+} from '../api/update-stock-movement';
 import { itemKeys } from './query-keys';
 
 export function useCreateIncome() {
@@ -26,6 +30,20 @@ export function useCreateExpense() {
 
   return useMutation({
     mutationFn: (params: CreateStockMovementParams) => createExpense(params),
+    onSuccess: (_, variables) => {
+      void queryClient.invalidateQueries({ queryKey: itemKeys.all });
+      void queryClient.invalidateQueries({
+        queryKey: ['items', 'detail', variables.itemId],
+      });
+    },
+  });
+}
+
+export function useUpdateStockMovement() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (params: UpdateStockMovementParams) => updateStockMovement(params),
     onSuccess: (_, variables) => {
       void queryClient.invalidateQueries({ queryKey: itemKeys.all });
       void queryClient.invalidateQueries({

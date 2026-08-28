@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { cn } from '@/shared/lib/cn';
 import { Text } from '@/shared/ui/text';
@@ -12,6 +12,7 @@ export interface MovementSummaryCardProps {
   date?: string;
   description?: string;
   icon: ReactNode;
+  onPress?: () => void;
   time: string;
   title: string;
   type: MovementSummaryCardType;
@@ -38,17 +39,21 @@ export function MovementSummaryCard({
   description,
   date,
   icon,
+  onPress,
   time,
   title,
   type,
 }: MovementSummaryCardProps) {
   const normalizedDescription = description?.trim();
   const normalizedDate = date?.trim();
+  const Container = onPress ? Pressable : View;
 
   return (
-    <View
+    <Container
+      onPress={onPress}
       className={cn(
         'mb-3 flex-row items-center overflow-hidden rounded-12 border border-border border-l-4 bg-surface p-4 shadow-card',
+        onPress && 'active:scale-[0.99] active:opacity-90',
         accentClassNames[type],
         className,
       )}
@@ -96,6 +101,6 @@ export function MovementSummaryCard({
           {amount}
         </Text>
       </View>
-    </View>
+    </Container>
   );
 }

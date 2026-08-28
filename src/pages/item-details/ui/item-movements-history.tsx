@@ -12,6 +12,7 @@ interface ItemMovementsHistoryProps {
   className?: string;
   itemName?: string;
   movements: StockMovement[];
+  onMovementPress?: (movement: StockMovement) => void;
   onShowAllPress?: () => void;
   unit?: string;
 }
@@ -20,6 +21,7 @@ export function ItemMovementsHistory({
   className,
   itemName,
   movements,
+  onMovementPress,
   onShowAllPress,
   unit,
 }: ItemMovementsHistoryProps) {
@@ -57,6 +59,7 @@ export function ItemMovementsHistory({
           key={movement.id}
           className='mb-1.5'
           movement={movement}
+          onPress={() => onMovementPress?.(movement)}
           title={itemName}
           unit={unit}
         />
