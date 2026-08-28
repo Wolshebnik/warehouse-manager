@@ -5,9 +5,12 @@ import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 
+import type { Dayjs } from '@/shared/lib/date';
+
 export function useExportBalanceReport() {
   const [isExporting, setIsExporting] = useState(false);
   const [generatedAt, setGeneratedAt] = useState<Date>(() => new Date());
+  const [reportDate, setReportDate] = useState<Date | Dayjs | string>(() => new Date());
   const exportRef = useRef<View>(null);
   const layoutResolverRef = useRef<(() => void) | null>(null);
 
@@ -18,7 +21,7 @@ export function useExportBalanceReport() {
     }
   }, []);
 
-  const exportReport = useCallback(async () => {
+  const exportReport = useCallback(async (customDate?: Date | Dayjs | string) => {
     if (isExporting) {
       return;
     }
@@ -30,6 +33,9 @@ export function useExportBalanceReport() {
         layoutResolverRef.current = resolve;
       });
 
+      if (customDate) {
+        setReportDate(customDate);
+      }
       setGeneratedAt(new Date());
 
       await layoutReady;
@@ -74,5 +80,6 @@ export function useExportBalanceReport() {
     generatedAt,
     handleLayout,
     isExporting,
+    reportDate,
   };
 }

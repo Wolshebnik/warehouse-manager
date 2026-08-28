@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { type View } from 'react-native';
+import type { LayoutChangeEvent, View } from 'react-native';
 
 import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
@@ -9,6 +9,14 @@ export function useExportItemMovementsReport() {
   const [isExporting, setIsExporting] = useState(false);
   const [generatedAt, setGeneratedAt] = useState<Date>(() => new Date());
   const exportRef = useRef<View>(null);
+  const layoutResolverRef = useRef<(() => void) | null>(null);
+
+  const handleLayout = useCallback((_event: LayoutChangeEvent) => {
+    if (layoutResolverRef.current) {
+      layoutResolverRef.current();
+      layoutResolverRef.current = null;
+    }
+  }, []);
 
   const exportReport = useCallback(async () => {
     if (isExporting) {
@@ -16,14 +24,15 @@ export function useExportItemMovementsReport() {
     }
 
     setIsExporting(true);
-    setGeneratedAt(new Date());
 
     try {
-      await new Promise<void>((resolve) => {
-        requestAnimationFrame(() => {
-          setTimeout(resolve, 50);
-        });
+      const layoutReady = new Promise<void>((resolve) => {
+        layoutResolverRef.current = resolve;
       });
+
+      setGeneratedAt(new Date());
+
+      await layoutReady;
 
       if (!exportRef.current) {
         throw new Error('Export view reference is not available');
@@ -54,6 +63,7 @@ export function useExportItemMovementsReport() {
         });
       }
     } finally {
+      layoutResolverRef.current = null;
       setIsExporting(false);
     }
   }, [isExporting]);
@@ -62,6 +72,7 @@ export function useExportItemMovementsReport() {
     exportRef,
     exportReport,
     generatedAt,
+    handleLayout,
     isExporting,
   };
 }

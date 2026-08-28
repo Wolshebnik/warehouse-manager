@@ -41,6 +41,7 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
     exportRef,
     exportReport,
     generatedAt,
+    handleLayout,
     isExporting,
   } = useExportItemMovementsReport();
 
@@ -190,6 +191,7 @@ export function ItemMovementsPage({ itemId }: ItemMovementsPageProps) {
             itemName={item.name}
             month={monthTitle}
             movements={filteredMovements}
+            onLayout={handleLayout}
             unit={item.unit?.short || item.unit?.name}
           />
         )}

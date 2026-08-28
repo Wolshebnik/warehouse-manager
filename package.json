@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "build": "node scripts/build-apk.mjs",
     "build:apk": "node scripts/build-apk.mjs",
+    "clean": "node scripts/clean.mjs",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit"
   },

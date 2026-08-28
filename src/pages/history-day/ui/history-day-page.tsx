@@ -35,6 +35,7 @@ export function HistoryDayPage({ date: propDate }: HistoryDayPageProps) {
     exportRef,
     exportReport,
     generatedAt,
+    handleLayout,
     isExporting,
   } = useExportDayMovementsReport();
 
@@ -142,6 +143,7 @@ export function HistoryDayPage({ date: propDate }: HistoryDayPageProps) {
           generatedAt={generatedAt}
           groups={movementGroups}
           movements={movements}
+          onLayout={handleLayout}
         />
       </View>
     </View>
