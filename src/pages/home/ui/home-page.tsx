@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { useGetItems } from '@/entities/item';
 import {
+  ExportBalanceDateSheet,
   ExportBalanceReportView,
   useExportBalanceReport,
 } from '@/features/export-balance-report';
@@ -18,12 +20,14 @@ import { AppHeader } from '@/widgets/header';
 
 export function HomePage() {
   const router = useRouter();
+  const [isDateSheetOpen, setIsDateSheetOpen] = useState(false);
   const {
     exportRef,
     exportReport,
     generatedAt,
     handleLayout,
     isExporting,
+    reportDate,
   } = useExportBalanceReport();
   const {
     data: items = [],
@@ -42,7 +46,7 @@ export function HomePage() {
             accessibilityRole='button'
             disabled={isExporting}
             className='h-10 w-10 items-center justify-center active:scale-[0.92]'
-            onPress={() => void exportReport()}
+            onPress={() => setIsDateSheetOpen(true)}
           >
             {isExporting ? (
               <CircularProgressLoader color='#2E7D32' size='small' />
@@ -109,8 +113,16 @@ export function HomePage() {
           generatedAt={generatedAt}
           items={items}
           onLayout={handleLayout}
+          reportDate={reportDate}
         />
       </View>
+
+      <ExportBalanceDateSheet
+        isExporting={isExporting}
+        isOpen={isDateSheetOpen}
+        onClose={() => setIsDateSheetOpen(false)}
+        onConfirm={(date) => void exportReport(date)}
+      />
     </View>
   );
 }

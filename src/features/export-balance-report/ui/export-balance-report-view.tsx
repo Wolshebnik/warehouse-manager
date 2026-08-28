@@ -2,9 +2,9 @@ import { forwardRef } from 'react';
 import { type LayoutChangeEvent, View } from 'react-native';
 
 import type { Item } from '@/entities/item';
-import { BoxItems, Calendar, Pin } from '@/shared/assets/svg';
+import { Calendar, Pin } from '@/shared/assets/svg';
 import { cn } from '@/shared/lib/cn';
-import { formatExportTimestamp, formatFullDate } from '@/shared/lib/date';
+import { type Dayjs, formatExportTimestamp, formatFullDate } from '@/shared/lib/date';
 import { Text } from '@/shared/ui/text';
 
 import { ExportBalanceReportCard } from './export-balance-report-card';
@@ -14,11 +14,12 @@ export interface ExportBalanceReportViewProps {
   generatedAt?: string | number | Date;
   items: Item[];
   onLayout?: (event: LayoutChangeEvent) => void;
+  reportDate?: string | number | Date | Dayjs;
 }
 
 export const ExportBalanceReportView = forwardRef<View, ExportBalanceReportViewProps>(
   function ExportBalanceReportView(
-    { className, generatedAt, items, onLayout },
+    { className, generatedAt, items, onLayout, reportDate },
     ref,
   ) {
     const activeItems = items
@@ -27,6 +28,7 @@ export const ExportBalanceReportView = forwardRef<View, ExportBalanceReportViewP
     const layoutKey = generatedAt
       ? String(new Date(generatedAt).getTime())
       : undefined;
+    const displayDate = reportDate || generatedAt;
 
     return (
       <View
@@ -36,18 +38,9 @@ export const ExportBalanceReportView = forwardRef<View, ExportBalanceReportViewP
         className={cn('w-[390px] bg-surface px-5 py-6', className)}
         onLayout={onLayout}
       >
-        <View className='mb-4 items-center'>
-          <View className='mb-2 h-12 w-12 items-center justify-center rounded-12 bg-green'>
-            <BoxItems className='text-white' height={24} width={24} />
-          </View>
-          <Text className='font-bold text-[18px] text-text-primary'>
-            Облік товару
-          </Text>
-        </View>
-
         <View className='mb-6 items-center'>
           <Text className='mb-1 text-center font-bold text-[20px] leading-6 text-text-primary'>
-            {formatFullDate(generatedAt)}
+            {formatFullDate(displayDate)}
           </Text>
 
           <View className='mb-2 flex-row items-center gap-1'>

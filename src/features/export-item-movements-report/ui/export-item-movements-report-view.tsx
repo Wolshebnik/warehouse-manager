@@ -1,12 +1,12 @@
 import { forwardRef } from 'react';
-import { View } from 'react-native';
+import { type LayoutChangeEvent, View } from 'react-native';
 
 import {
   ItemBalanceCard,
   ItemMovementCard,
   type StockMovement,
 } from '@/entities/item';
-import { BoxItems, Calendar, Pin } from '@/shared/assets/svg';
+import { Calendar, Pin } from '@/shared/assets/svg';
 import { cn } from '@/shared/lib/cn';
 import { formatExportTimestamp } from '@/shared/lib/date';
 import { Text } from '@/shared/ui/text';
@@ -19,6 +19,7 @@ export interface ExportItemMovementsReportViewProps {
   itemName: string;
   month: string;
   movements: StockMovement[];
+  onLayout?: (event: LayoutChangeEvent) => void;
   unit?: string;
 }
 
@@ -34,29 +35,38 @@ export const ExportItemMovementsReportView = forwardRef<
     itemName,
     month,
     movements,
+    onLayout,
     unit,
   },
   ref,
 ) {
+  const layoutKey = generatedAt
+    ? String(new Date(generatedAt).getTime())
+    : undefined;
+
   return (
     <View
       ref={ref}
+      key={layoutKey}
       collapsable={false}
-      className={cn('w-[390px] bg-background p-4', className)}
+      className={cn('w-[390px] bg-surface px-5 py-6', className)}
+      onLayout={onLayout}
     >
-      <View className='mb-4 items-center'>
-        <View className='mb-2 h-12 w-12 items-center justify-center rounded-12 bg-green'>
-          <BoxItems className='text-white' height={24} width={24} />
-        </View>
-        <Text className='font-bold text-[18px] text-text-primary'>
-          Облік товару
+      <View className='mb-6 items-center'>
+        <Text className='mb-1 text-center font-bold text-[20px] leading-6 text-text-primary'>
+          {itemName}
         </Text>
-        <View className='mt-1 flex-row items-center gap-1'>
+
+        <View className='mb-2 flex-row items-center gap-1'>
           <Pin className='text-text-muted' height={14} width={14} />
-          <Text className='font-medium text-[13px] text-text-muted'>
+          <Text className='font-medium text-[14px] text-text-muted'>
             Магазин: Захисників України, 7/8
           </Text>
         </View>
+
+        <Text className='font-medium text-[16px] text-text-muted'>
+          Рухи товару
+        </Text>
       </View>
 
       <ItemBalanceCard
