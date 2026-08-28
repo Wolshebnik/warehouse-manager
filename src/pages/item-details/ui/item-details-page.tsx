@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
-import { ItemBalanceCard, useItemById } from '@/entities/item';
+import { ItemBalanceCard, type StockMovement, useItemById } from '@/entities/item';
+import { EditStockMovementSheet } from '@/features/edit-stock-movement';
 import { ExpenseMaterialSheet } from '@/features/expense-material';
 import { IncomeMaterialSheet } from '@/features/income-material';
 import { ROUTES } from '@/shared/config/routes';
@@ -23,6 +24,7 @@ export function ItemDetailsPage({ itemId }: ItemDetailsPageProps) {
   const router = useRouter();
   const [isIncomeOpen, setIsIncomeOpen] = useState(false);
   const [isExpenseOpen, setIsExpenseOpen] = useState(false);
+  const [selectedMovement, setSelectedMovement] = useState<StockMovement | null>(null);
   const params = useLocalSearchParams<{ id?: string }>();
   const id = itemId ?? (Array.isArray(params.id) ? params.id[0] : params.id) ?? '';
 
@@ -85,6 +87,7 @@ export function ItemDetailsPage({ itemId }: ItemDetailsPageProps) {
                 itemName={item.name}
                 movements={item.movements}
                 unit={item.unit?.short || item.unit?.name || ''}
+                onMovementPress={(movement) => setSelectedMovement(movement)}
                 onShowAllPress={() => router.replace(ROUTES.ITEM_MOVEMENTS(id))}
               />
             </View>
@@ -102,6 +105,13 @@ export function ItemDetailsPage({ itemId }: ItemDetailsPageProps) {
         isOpen={isExpenseOpen}
         item={item}
         onClose={() => setIsExpenseOpen(false)}
+      />
+
+      <EditStockMovementSheet
+        isOpen={Boolean(selectedMovement)}
+        item={item}
+        movement={selectedMovement}
+        onClose={() => setSelectedMovement(null)}
       />
     </View>
   );
