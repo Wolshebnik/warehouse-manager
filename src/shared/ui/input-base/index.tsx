@@ -1,6 +1,12 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
+
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
-import { TextInput, type TextInputProps, useWindowDimensions, View } from 'react-native';
+import {
+  TextInput,
+  type TextInputProps,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -25,27 +31,37 @@ export function InputBase({
   required,
   rightElement,
   multiline,
+  onBlur,
+  onFocus,
+  placeholder,
   variant = 'green',
   ...props
 }: InputBaseProps) {
   const hasError = Boolean(error);
+  const [isFocused, setIsFocused] = useState(false);
   const { width: windowWidth } = useWindowDimensions();
   const isWide = windowWidth > 640;
 
-  const InputComponent = bottomSheet && !isWide ? BottomSheetTextInput : TextInput;
+  const inputComponents = [TextInput, BottomSheetTextInput] as const;
+  const InputComponent = inputComponents[Number(bottomSheet && !isWide)];
 
-  const isRed = variant === 'red';
-  const borderClassName = hasError
-    ? 'border-red border-[1.5px] bg-red-tint/30'
-    : isRed
-      ? 'border-[#E5B8B6]'
-      : 'border-green';
+  const borderClassName = cn(
+    !hasError &&
+      {
+        green: 'border-green',
+        red: 'border-[#E5B8B6]',
+      }[variant],
+    hasError && 'border-red border-[1.5px] bg-red-tint/30',
+  );
 
-  const labelColorClassName = hasError
-    ? 'text-red font-bold'
-    : isRed
-      ? 'text-red'
-      : 'text-green';
+  const labelColorClassName = cn(
+    !hasError &&
+      {
+        green: 'text-green',
+        red: 'text-red',
+      }[variant],
+    hasError && 'text-red font-bold',
+  );
 
   const inputClassName = cn(
     'pl-4',
@@ -56,17 +72,21 @@ export function InputBase({
     props.editable === false && 'bg-neutral-soft text-text-muted',
     multiline && 'py-3',
   );
+  const textAlignVertical: 'center' | 'top' = ['center', 'top'][
+    Number(Boolean(multiline))
+  ] as 'center' | 'top';
 
   return (
     <View className={cn('w-full', label && 'pt-2.5', className)}>
-      {label ? (
-        <View
-          className={cn(
-            'relative flex-row items-center rounded-12 border',
-            multiline ? 'min-h-[96px] items-start' : 'h-14',
-            borderClassName,
-          )}
-        >
+      <View
+        className={cn(
+          label && 'relative',
+          'flex-row items-center rounded-12 border',
+          ['h-14', 'min-h-[96px] items-start'][Number(Boolean(multiline))],
+          borderClassName,
+        )}
+      >
+        {label && (
           <View
             className='absolute -top-2.5 left-3 z-10 flex-row items-center px-1'
             style={{ backgroundColor: labelColor }}
@@ -75,45 +95,32 @@ export function InputBase({
               {label}
             </Text>
 
-            {required && (
-              <Text className='ml-0.5 text-[12px] text-red'>*</Text>
-            )}
+            {required && <Text className='ml-0.5 text-[12px] text-red'>*</Text>}
           </View>
+        )}
 
-          <InputComponent
-            multiline={multiline}
-            className={cn(inputClassName, 'flex-1')}
-            textAlignVertical={multiline ? 'top' : 'center'}
-            {...props}
-          />
+        <InputComponent
+          {...props}
+          className={cn(inputClassName, 'flex-1')}
+          multiline={multiline}
+          onBlur={(event) => {
+            setIsFocused(false);
+            onBlur?.(event);
+          }}
+          onFocus={(event) => {
+            setIsFocused(true);
+            onFocus?.(event);
+          }}
+          placeholder={isFocused ? undefined : placeholder}
+          textAlignVertical={textAlignVertical}
+        />
 
-          {Boolean(rightElement) && (
-            <View className='pr-4 items-center justify-center'>
-              {rightElement}
-            </View>
-          )}
-        </View>
-      ) : (
-        <View
-          className={cn(
-            'flex-row items-center rounded-12 border',
-            multiline ? 'min-h-[96px] items-start' : 'h-14',
-            borderClassName,
-          )}
-        >
-          <InputComponent
-            multiline={multiline}
-            className={cn(inputClassName, 'flex-1')}
-            textAlignVertical={multiline ? 'top' : 'center'}
-            {...props}
-          />
-          {Boolean(rightElement) && (
-            <View className='pr-4 items-center justify-center'>
-              {rightElement}
-            </View>
-          )}
-        </View>
-      )}
+        {Boolean(rightElement) && (
+          <View className='items-center justify-center pr-4'>
+            {rightElement}
+          </View>
+        )}
+      </View>
 
       {hasError && (
         <Text className='ml-1 mt-1 text-[12px] text-red'>{error}</Text>
@@ -121,4 +128,3 @@ export function InputBase({
     </View>
   );
 }
-

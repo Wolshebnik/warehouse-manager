@@ -11,6 +11,11 @@ import {
 } from '@/entities/item';
 import { ButtonLoader } from '@/shared/ui/button-loader';
 import { InputBase } from '@/shared/ui/input-base';
+import { RemainingBalanceCard } from '@/shared/ui/remaining-balance-card';
+import {
+  TargetBalanceInput,
+  TargetBalanceToggle,
+} from '@/shared/ui/target-balance-input';
 import { Text } from '@/shared/ui/text';
 
 import {
@@ -31,6 +36,7 @@ export function ExpenseMaterialForm({
 }: ExpenseMaterialFormProps) {
   const { mutateAsync: createExpenseMutation, isPending } = useCreateExpense();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   const unit = item?.unit?.short || item?.unit?.name || '';
   const currentBalance = item?.current_balance ?? 0;
@@ -38,6 +44,7 @@ export function ExpenseMaterialForm({
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseFormSchema),
@@ -55,6 +62,7 @@ export function ExpenseMaterialForm({
 
   const onSubmit = async (data: ExpenseFormData) => {
     if (!item) {
+
       return;
     }
     setSubmitError(null);
@@ -73,7 +81,7 @@ export function ExpenseMaterialForm({
   };
 
   return (
-    <View className='gap-4 py-2'>
+    <View className='gap-2 py-2'>
       <Controller
         control={control}
         name='amount'
@@ -97,6 +105,21 @@ export function ExpenseMaterialForm({
         )}
       />
 
+      <TargetBalanceInput
+        key={isCalculatorOpen ? 'open' : 'closed'}
+        amount={amountValue}
+        currentBalance={currentBalance}
+        isOpen={isCalculatorOpen}
+        onQuantityChange={(value) =>
+          setValue('amount', value, {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }
+        type='expense'
+        unit={unit}
+      />
+
       <Controller
         control={control}
         name='comment'
@@ -114,32 +137,36 @@ export function ExpenseMaterialForm({
         )}
       />
 
-      <View className='rounded-16 border border-red-border bg-red-tint p-3'>
-        <Text className='mb-0.5 font-medium text-[13px] text-text-muted'>
-          Залишок після списання
-        </Text>
-        <View className='flex-row items-baseline gap-1.5'>
-          <Text className='font-bold text-[26px] leading-7 text-red'>
-            {remainingBalance.toLocaleString('uk-UA')}
-          </Text>
-          <Text className='font-bold text-[16px] text-red'>{unit}</Text>
-        </View>
-      </View>
+      <RemainingBalanceCard
+        amount={remainingBalance}
+        title='Залишок після списання'
+        type='expense'
+        unit={unit}
+      />
 
       {Boolean(submitError) && (
         <Text className='text-center text-[13px] text-red'>{submitError}</Text>
       )}
 
-      <ButtonLoader
-        variant='red'
-        loading={isPending}
-        loaderColor='#FFFFFF'
-        loaderSize='small'
-        className='w-full py-3.5'
-        onPress={handleSubmit(onSubmit)}
-      >
-        Списати
-      </ButtonLoader>
+      <View className='flex-row gap-2'>
+        <TargetBalanceToggle
+          isOpen={isCalculatorOpen}
+          onPress={() => setIsCalculatorOpen((isOpen) => !isOpen)}
+          type='expense'
+        />
+        <View className='flex-[2]'>
+          <ButtonLoader
+            variant='red'
+            loading={isPending}
+            loaderColor='#FFFFFF'
+            loaderSize='small'
+            className='w-full py-3.5'
+            onPress={handleSubmit(onSubmit)}
+          >
+            Списати
+          </ButtonLoader>
+        </View>
+      </View>
     </View>
   );
 }
