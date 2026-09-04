@@ -13,6 +13,7 @@ import {
 } from '@/entities/item';
 import { ButtonLoader } from '@/shared/ui/button-loader';
 import { InputBase } from '@/shared/ui/input-base';
+import { RemainingBalanceCard } from '@/shared/ui/remaining-balance-card';
 import { Text } from '@/shared/ui/text';
 
 import {
@@ -146,37 +147,12 @@ export function EditStockMovementForm({
         )}
       />
 
-      <View
-        className={
-          isIncome
-            ? 'rounded-16 border border-green-border bg-green-tint p-3'
-            : 'rounded-16 border border-red-border bg-red-tint p-3'
-        }
-      >
-        <Text className='mb-0.5 font-medium text-[13px] text-text-muted'>
-          {isIncome ? 'Залишок після приходу' : 'Залишок після списання'}
-        </Text>
-        <View className='flex-row items-baseline gap-1.5'>
-          <Text
-            className={
-              isIncome
-                ? 'font-bold text-[26px] leading-7 text-green'
-                : 'font-bold text-[26px] leading-7 text-red'
-            }
-          >
-            {calculatedBalance.toLocaleString('uk-UA')}
-          </Text>
-          <Text
-            className={
-              isIncome
-                ? 'font-bold text-[16px] text-green'
-                : 'font-bold text-[16px] text-red'
-            }
-          >
-            {unit}
-          </Text>
-        </View>
-      </View>
+      <RemainingBalanceCard
+        amount={calculatedBalance}
+        title={isIncome ? 'Залишок після приходу' : 'Залишок після списання'}
+        type={isIncome ? 'income' : 'expense'}
+        unit={unit}
+      />
 
       {Boolean(submitError) && (
         <Text className='text-center text-[13px] text-red'>{submitError}</Text>
